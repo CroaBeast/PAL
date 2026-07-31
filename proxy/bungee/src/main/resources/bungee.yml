@@ -1,0 +1,16 @@
+# BungeeCord plugin display name.
+name: PAL-Proxy
+# BungeeCord plugin entrypoint class.
+main: com.bitaspire.pal.proxy.bungee.PALBungeePlugin
+# Version is expanded by Gradle during resource processing.
+version: '${version}'
+# Plugin author.
+author: CroaBeast
+
+# Optional proxy dependencies. The proxy addon starts without them and enables hooks when present.
+# Values:
+# - FastLogin: premium login-mode decisions.
+# - floodgate: Bedrock login detection.
+softDepends:
+  - FastLogin
+  - floodgate

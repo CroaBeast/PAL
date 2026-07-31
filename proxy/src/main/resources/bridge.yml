@@ -1,0 +1,132 @@
+# PAL proxy bridge configuration.
+bridge:
+  # Enables proxy-side auth/session guarding.
+  enabled: true
+  # Session sync backend.
+  # Values: REDIS, DATABASE, MEMORY, DISABLED.
+  # REDIS: real-time signed sessions plus Pub/Sub.
+  # DATABASE: shared SQL session lookup with polling; works without Redis.
+  # MEMORY: local proxy memory only; useful for tests, not Bukkit <-> proxy sync.
+  mode: REDIS
+
+  # Logical network server names as configured in the proxy.
+  net:
+    # Server used for unauthenticated players.
+    auth: auth
+    # Server used for authenticated players returning from auth.
+    lobby: lobby
+    # Remembers the requested target while the player authenticates.
+    remember: true
+    # Number of backend servers expected behind the proxy.
+    servers: 1
+
+  # Proxy-side access guard.
+  guard:
+    # Denies access if no auth route/fallback can be used.
+    strict: true
+    # Requires authentication before non-auth servers.
+    required: true
+    # Allows verified Java premium identities to create sessions when proxy-auto-login is enabled.
+    premium: true
+    # Allows verified Bedrock identities to create sessions when proxy-auto-login is enabled.
+    bedrock: true
+    # If true, verified proxy identities can skip Bukkit password auth.
+    proxy-auto-login: true
+    # Controls /server auth for players who already have a valid session.
+    # Values:
+    # - REDIRECT: authenticated players are routed away from auth.
+    # - ALLOW: authenticated players may manually enter auth and receive a warning message.
+    authenticated-auth-target: REDIRECT
+
+  # Session lifetime created by proxy-side auto-login.
+  session:
+    # Minutes before a proxy-created session expires. 0 means no expiry.
+    minutes: 30
+
+  # Native Java premium verification performed by PAL proxy code.
+  native:
+    # Enables native Mojang ownership checks unless FastLogin handles them.
+    enabled: true
+    # Maximum wait time for native verification.
+    timeout-ms: 5000
+    # If true, failed native verification blocks login instead of falling back to offline mode.
+    block-error: true
+
+  # Proxy-only messages.
+  messages:
+    # Sent when a player tries to enter a protected server without a valid session.
+    authentication-required: "Authentication required"
+    # Sent when an authenticated player is routed away from auth.
+    already-authenticated: "Already authenticated"
+    # Sent when authenticated-auth-target is ALLOW and a logged-in player manually enters auth.
+    authenticated-auth-allowed: "You are already authenticated. Auth is only needed for login."
+    # Sent when the configured auth server cannot be found.
+    auth-server-unavailable: "Authentication server is not available"
+    # Sent as the kick redirect reason when fallback redirects after backend kicks.
+    # Placeholders: {server}.
+    redirecting: "Redirecting to {server}"
+    # Sent when native premium verification is configured to block on failure.
+    native-verification-failed: "Could not verify Mojang ownership"
+
+  # Backend failover behavior.
+  fail:
+    # Enables routing to fallback/auth when a target is unavailable.
+    enabled: true
+    # Keeps players online when failover is possible.
+    keep: true
+    # Rejoins players to a valid target after backend disconnects.
+    rejoin: true
+    # Allows fallback as a new-login target when auth is unavailable.
+    new-login: false
+    # Logical fallback server name.
+    fallback: limbo
+
+  # Bridge signing/security.
+  sec:
+    # Requires signed bridge payloads.
+    require: true
+    # Shared HMAC secret. Change this and use the same value in Bukkit bridge.yml.
+    secret: "change-me"
+    # Stores hashed IP values in sessions.
+    hash-ip: true
+    # Requires IP hash to match on session reuse when supported.
+    bind-ip: false
+    # Allowed clock skew in seconds for signed payload issue times.
+    skew: 15
+
+  # Redis bridge settings.
+  redis:
+    # Redis URI.
+    uri: "redis://localhost:6379/0"
+    # Key prefix used by PAL.
+    prefix: "pal:"
+    # Pub/Sub channel used for session notifications.
+    channel: "pal:auth"
+
+  # SQL bridge settings.
+  database:
+    # SQL database type.
+    # Values: MYSQL, MARIADB, POSTGRESQL, SQLITE.
+    type: MYSQL
+    # Table prefix used by PAL.
+    table-prefix: pal_
+    # Poll interval in seconds for DATABASE mode.
+    poll: 3
+    # SQLite settings.
+    sqlite:
+      # SQLite file path.
+      file: plugins/PAL/database.db
+    # Remote SQL settings for MYSQL, MARIADB, and POSTGRESQL.
+    remote:
+      # SQL hostname.
+      host: localhost
+      # SQL port.
+      port: 3306
+      # SQL database/schema name.
+      database: pal
+      # SQL username.
+      username: username
+      # SQL password.
+      password: password
+      # Enables SQL SSL where supported.
+      ssl: true
