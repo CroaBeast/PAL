@@ -1,0 +1,137 @@
+# Bukkit <-> proxy bridge settings.
+bridge:
+  # Enables Bukkit publishing auth sessions for proxy addons.
+  # Values: true, false.
+  # Keep false on single-server setups.
+  enabled: false
+
+  # Bridge transport mode.
+  # Values:
+  # - REDIS: recommended for networks; signed sessions plus Pub/Sub events.
+  # - DATABASE: shared SQL session lookup; no Redis required, but proxy updates use polling.
+  # - MEMORY: local Bukkit memory only; useful for tests, not Bukkit <-> proxy sync.
+  # - DISABLED: bridge off.
+  mode: DATABASE
+
+  # Logical network server names used by the proxy and Bukkit bridge payloads.
+  net:
+    # Proxy server name used for authentication.
+    auth: auth
+    # Proxy server name used as the normal lobby after login.
+    lobby: lobby
+    # Remembers the original requested backend while the player authenticates.
+    # Values: true, false.
+    remember: true
+    # Manual hint for network size until a proxy handshake reports it.
+    servers: 1
+
+  # Proxy-side access policy exported to bridge options.
+  guard:
+    # Enforces the auth redirect rules for protected backend access.
+    # Values: true, false.
+    strict: true
+    # Requires an authenticated PAL session before backend access.
+    # Values: true, false.
+    required: true
+    # Allows verified Java premium identities to be considered by the guard.
+    # Values: true, false.
+    premium: true
+    # Allows verified Bedrock/Floodgate identities to be considered by the guard.
+    # Values: true, false.
+    bedrock: true
+    # When false, verified premium/Bedrock players still visit auth once so PAL
+    # can create a persistent account and signed session before backend access.
+    # Values: true, false.
+    proxy-auto-login: false
+
+  # Session defaults shared with proxy addons.
+  session:
+    # Auth session lifetime in minutes.
+    minutes: 30
+
+  # Native proxy login-mode verification settings.
+  native:
+    # Enables PAL native proxy identity decisions when FastLogin/Floodgate do not handle them.
+    # Values: true, false.
+    enabled: true
+    # Maximum time to wait for a native verification decision.
+    timeout-ms: 5000
+    # Blocks login if native verification fails unexpectedly.
+    # Values: true, false.
+    block-error: true
+
+  # Behavior when auth or a backend is unavailable.
+  fail:
+    # Enables failover handling.
+    # Values: true, false.
+    enabled: true
+    # Keeps already-authenticated players online when their valid session can still be checked.
+    # Values: true, false.
+    keep: true
+    # Allows reconnects with an existing valid bridge session.
+    # Values: true, false.
+    rejoin: true
+    # Allows new unauthenticated logins during auth outage.
+    # Values: true, false.
+    # Keep false unless you intentionally accept unauthenticated players during outages.
+    new-login: false
+    # Logical proxy server used as limbo/fallback. If missing, proxy addons fall back to lobby.
+    fallback: limbo
+
+  # Shared bridge security settings.
+  sec:
+    # Requires signed bridge payloads and signed SQL session payloads.
+    # Values: true, false.
+    require: true
+    # Shared HMAC secret used by Bukkit and proxy addons.
+    # Replace change-me with a long random value before production.
+    secret: "change-me"
+    # Hashes IP addresses inside signed bridge payloads instead of storing raw IP text.
+    # Values: true, false.
+    hash-ip: true
+    # Binds sessions to the player's IP address during validation.
+    # Values: true, false.
+    bind-ip: false
+    # Allowed clock skew in seconds for signed payload timestamps.
+    skew: 15
+
+  # Startup advice/warning thresholds.
+  advice:
+    # Warns when SQLite is used in a topology where a remote database is safer.
+    # Values: true, false.
+    sqlite: true
+    # Server-count threshold after which SQLite warnings become more strict.
+    sqlite-cap: 4
+
+  # Redis bridge connection settings.
+  redis:
+    # Redis connection URI.
+    uri: "redis://localhost:6379/0"
+    # Key prefix used for PAL bridge data.
+    prefix: "pal:"
+    # Pub/Sub channel used for auth session events.
+    channel: "pal:auth"
+
+  # DATABASE bridge settings for Bukkit.
+  database:
+    # Bukkit uses storage.yml for database connection details.
+    # Proxy addons must point their own bridge.yml database section to the same remote SQL database.
+    # This value controls proxy polling cadence when the proxy reads shared SQL sessions.
+    poll: 3
+
+  # Bukkit-side direct backend access guard.
+  backend:
+    # Blocks players whose IP is not listed in proxy-ips.
+    # Values: true, false.
+    # Firewall rules or proxy forwarding secrets are still recommended.
+    guard: false
+    # Allowed proxy IP addresses when backend.guard is true.
+    # Values: IPv4 or IPv6 address strings.
+    proxy-ips:
+      - "127.0.0.1"
+      - "::1"
+
+  # Plugin messaging settings.
+  plugin:
+    # Internal Bukkit <-> proxy plugin-message channel used by bridge features.
+    channel: "pal:bridge"

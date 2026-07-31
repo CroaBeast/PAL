@@ -1,0 +1,285 @@
+# Account/session storage settings.
+storage:
+  # Primary database type.
+  # Values:
+  # - SQLITE: local file database; fine for small single-server setups.
+  # - MYSQL: remote MySQL database.
+  # - MARIADB: remote MariaDB database.
+  # - POSTGRESQL: remote PostgreSQL database.
+  type: SQLITE
+  # Prefix added to PAL table names.
+  table-prefix: pal_
+
+  # SQLite file settings.
+  sqlite:
+    # Database file path relative to the server root.
+    file: plugins/PAL/database.db
+
+  # Remote SQL settings used by MYSQL, MARIADB, and POSTGRESQL.
+  remote:
+    # Database host or IP address.
+    host: localhost
+    # Database port.
+    # Values:
+    # - 3306: MySQL/MariaDB default.
+    # - 5432: PostgreSQL default.
+    port: 3306
+    # Database/schema name.
+    database: pal
+    # Database username.
+    username: username
+    # Database password.
+    password: password
+    # Enables SSL/TLS for the database connection when the driver supports it.
+    # Values: true, false.
+    ssl: true
+
+  # Connection pool settings.
+  pool:
+    # Pool name shown in diagnostics.
+    name: PAL-DB
+    # Maximum simultaneous database connections.
+    max-pool-size: 10
+    # Minimum idle connections kept ready.
+    min-idle: 2
+    # Maximum time in milliseconds to wait for a connection.
+    connection-timeout-ms: 30000
+    # Leak detection threshold in milliseconds. 0 disables leak detection.
+    leak-detection-threshold-ms: 0
+
+# In-memory cache settings.
+cache:
+  # Account cache settings.
+  accounts:
+    # Enables account caching.
+    # Values: true, false.
+    enabled: true
+    # Minutes after last access before cached account data expires.
+    expire-after-access-minutes: 15
+    # Maximum cached account entries.
+    max-size: 10000
+
+  # Session cache settings.
+  sessions:
+    # Enables session caching.
+    # Values: true, false.
+    enabled: true
+    # Minutes after last access before cached session data expires.
+    expire-after-access-minutes: 60
+    # Maximum cached session entries.
+    max-size: 10000
+
+# Periodic save behavior.
+autosave:
+  # Enables scheduled persistence flushes.
+  # Values: true, false.
+  enabled: true
+  # Seconds between autosave flushes.
+  interval-seconds: 300
+  # Flushes pending data when the plugin disables.
+  # Values: true, false.
+  flush-on-disable: true
+
+# Account migration/import settings.
+migrations:
+  # Enables migration commands.
+  # Values: true, false.
+  enabled: true
+  # Creates backups before importing data when supported.
+  # Values: true, false.
+  backup-before-import: true
+  # Supported migration providers.
+  providers:
+    # AuthMe importer mapping.
+    authme:
+      # Enables this provider.
+      # Values: true, false.
+      enabled: true
+      # Source database connection.
+      source:
+        # Source database type.
+        # Values: SQLITE, MYSQL, MARIADB, POSTGRESQL.
+        type: SQLITE
+        # Source SQLite file path.
+        file: plugins/AuthMe/authme.db
+      # Source table name.
+      table: authme
+      # Account type assigned to imported accounts.
+      # Values: OFFLINE, PREMIUM, BEDROCK.
+      account-type: OFFLINE
+      # Source column mapping.
+      columns:
+        # Player name column.
+        name: username
+        # Password hash column.
+        password: password
+        # Last known IP address column.
+        address: ip
+        # Registration timestamp column.
+        registered-at: regdate
+        # Last login timestamp column.
+        last-login-at: lastlogin
+
+    # nLogin importer mapping.
+    nlogin:
+      # Enables this provider.
+      # Values: true, false.
+      enabled: true
+      # Source database connection.
+      source:
+        # Source database type.
+        # Values: SQLITE, MYSQL, MARIADB, POSTGRESQL.
+        type: SQLITE
+        # Source SQLite file path.
+        file: plugins/nLogin/data.db
+      # Source table name.
+      table: nlogin
+      # Account type assigned to imported accounts.
+      # Values: OFFLINE, PREMIUM, BEDROCK.
+      account-type: OFFLINE
+      # Source column mapping.
+      columns:
+        # Player name column.
+        name: name
+        # Player UUID column.
+        uuid: uuid
+        # Password hash column.
+        password: password
+        # Last known IP address column.
+        address: last_ip
+        # Registration timestamp column.
+        registered-at: created_at
+        # Last login timestamp column.
+        last-login-at: last_login
+        # Premium-state column, when present.
+        premium: premium
+
+    # OpeNLogin importer mapping.
+    openlogin:
+      # Enables this provider.
+      # Values: true, false.
+      enabled: true
+      # Source database connection.
+      source:
+        # Source database type.
+        # Values: SQLITE, MYSQL, MARIADB, POSTGRESQL.
+        type: SQLITE
+        # Source SQLite file path.
+        file: plugins/OpeNLogin/database.db
+      # Source table name.
+      table: openlogin
+      # Account type assigned to imported accounts.
+      # Values: OFFLINE, PREMIUM, BEDROCK.
+      account-type: OFFLINE
+      # Source column mapping.
+      columns:
+        # Player name column.
+        name: name
+        # Player UUID column.
+        uuid: uuid
+        # Password hash column.
+        password: password
+        # Last known IP address column.
+        address: ip
+        # Registration timestamp column.
+        registered-at: register_date
+        # Last login timestamp column.
+        last-login-at: last_login
+        # Premium-state column, when present.
+        premium: premium
+
+    # LibreLogin importer mapping.
+    librelogin:
+      # Enables this provider.
+      # Values: true, false.
+      enabled: true
+      # Source database connection.
+      source:
+        # Source database type.
+        # Values: SQLITE, MYSQL, MARIADB, POSTGRESQL.
+        type: SQLITE
+        # Source SQLite file path.
+        file: plugins/LibreLogin/accounts.db
+      # Source table name.
+      table: librelogin_accounts
+      # Account type assigned to imported accounts.
+      # Values: OFFLINE, PREMIUM, BEDROCK.
+      account-type: OFFLINE
+      # Source column mapping.
+      columns:
+        # Player name column.
+        name: last_name
+        # Player UUID column.
+        uuid: uuid
+        # Password hash column.
+        password: password
+        # Last known IP address column.
+        address: last_ip
+        # Registration timestamp column.
+        registered-at: created
+        # Last login timestamp column.
+        last-login-at: last_login
+        # Premium-state column, when present.
+        premium: premium
+
+    # LoginSecurity importer mapping.
+    loginsecurity:
+      # Enables this provider.
+      # Values: true, false.
+      enabled: true
+      # Source database connection.
+      source:
+        # Source database type.
+        # Values: SQLITE, MYSQL, MARIADB, POSTGRESQL.
+        type: SQLITE
+        # Source SQLite file path.
+        file: plugins/LoginSecurity/database.db
+      # Source table name.
+      table: ls_players
+      # Account type assigned to imported accounts.
+      # Values: OFFLINE, PREMIUM, BEDROCK.
+      account-type: OFFLINE
+      # Source column mapping.
+      columns:
+        # Player name column.
+        name: name
+        # Player UUID column.
+        uuid: uuid
+        # Password hash column.
+        password: password
+        # Last known IP address column.
+        address: ip
+        # Registration timestamp column.
+        registered-at: registered
+        # Last login timestamp column.
+        last-login-at: last_login
+
+    # FastLogin importer mapping.
+    fastlogin:
+      # Enables this provider.
+      # Values: true, false.
+      enabled: true
+      # Source database connection.
+      source:
+        # Source database type.
+        # Values: SQLITE, MYSQL, MARIADB, POSTGRESQL.
+        type: SQLITE
+        # Source SQLite file path.
+        file: plugins/FastLogin/fastlogin.db
+      # Source table name.
+      table: fastlogin
+      # Account type assigned to imported accounts.
+      # Values: OFFLINE, PREMIUM, BEDROCK.
+      account-type: PREMIUM
+      # Source column mapping.
+      columns:
+        # Player name column.
+        name: name
+        # Player UUID column.
+        uuid: uuid
+        # Registration timestamp column.
+        registered-at: firstlogin
+        # Last login timestamp column.
+        last-login-at: lastlogin
+        # Premium-state column, when present.
+        premium: premium

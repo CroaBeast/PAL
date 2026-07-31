@@ -1,0 +1,305 @@
+# General command and system messages.
+general:
+  # Sent when a sender lacks a required permission.
+  no-permission: "<P> &cYou do not have permission to do that."
+  # Sent when a console or non-player sender uses a player-only command.
+  player-only: "<P> &cOnly players can use this command."
+  # Sent when a command reaches a feature that is not available yet.
+  not-ready: "<P> &cThis PAL feature is not wired yet."
+  # Sent after a normal reload succeeds.
+  reload: "<P> &aConfiguration reloaded."
+  # Generic internal-error message.
+  error: "<P> &cAn internal error occurred."
+  # Sent for invalid arguments.
+  # Placeholders: {argument}.
+  unknown-argument: "<P> &cUnknown argument: &f{argument}"
+  # Sent when command syntax is wrong.
+  # Placeholders: {usage}.
+  usage: "<P> &cUsage: &f{usage}"
+  # Sent when an action requires explicit confirmation.
+  # Placeholders: {usage}.
+  confirm: "<P> &eConfirm this action with &f{usage}&e."
+
+# Login and registration messages.
+auth:
+  # Messages prompting an existing account to login.
+  prompt-login:
+    # Chat prompt for login.
+    chat: "<P> Please log in with &f/login <password>&7."
+    # Action-bar prompt for login.
+    action-bar: "&b/login <password>"
+    # Title prompt for login.
+    title: "&bLogin Required<n>&7Use /login <password>"
+
+  # Messages prompting a new account to register.
+  prompt-register:
+    # Chat prompt for registration.
+    chat: "<P> Please register with &f/register <password> <password>&7."
+    # Action-bar prompt for registration.
+    action-bar: "&b/register <password> <password>"
+    # Title prompt for registration.
+    title: "&bRegister<n>&7Protect your account"
+
+  # Sent after successful authentication.
+  success: "<P> &aAuthenticated successfully."
+  # Sent after successful registration.
+  registered: "<P> &aAccount registered successfully."
+  # Sent after self-unregistration.
+  unregistered: "<P> &aYour account registration has been removed."
+  # Sent after manual logout.
+  logout: "<P> &aYou have been logged out."
+  # Sent after password change.
+  password-changed: "<P> &aYour password has been changed."
+  # Sent when the password is incorrect.
+  invalid-password: "<P> &cInvalid password."
+  # Sent when repeated passwords do not match.
+  password-mismatch: "<P> &cPasswords do not match."
+  # Sent when the password is below the configured minimum length.
+  password-short: "<P> &cYour password is too short."
+  # Sent when the password exceeds the configured maximum length.
+  password-long: "<P> &cYour password is too long."
+  # Sent when the password contains the username.
+  password-name: "<P> &cYour password cannot contain your username."
+  # Sent when the password is blocked as too common.
+  password-common: "<P> &cThat password is too common."
+  # Sent when the username does not match the configured name pattern.
+  invalid-name: "<P> &cYour username is not allowed."
+  # Generic auth failure message.
+  error: "<P> &cAuthentication failed."
+  # Sent when a player logs in while already authenticated.
+  already-logged: "<P> &eYou are already logged in."
+  # Sent when a command requires login but the player is not authenticated.
+  not-logged: "<P> &cYou are not logged in."
+  # Sent when an account lookup finds no registration.
+  not-registered: "<P> &cThis account is not registered."
+  # Sent when registration is attempted for an existing account.
+  already-registered: "<P> &cThis account is already registered."
+  # Sent when registration is disabled.
+  registration-disabled: "<P> &cRegistration is disabled."
+  # Sent when throttling blocks a fast retry.
+  rate-limited: "<P> &cYou are trying too fast."
+  # Sent when the login timeout expires.
+  timed-out: "<P> &cLogin timed out."
+  # Sent when an existing auth session expires or is invalidated.
+  session-expired: "<P> &eYour auth session is no longer active. Please login again."
+  # Kick message sent when an admin force-logs out a verified Premium or Bedrock account.
+  reconnect-to-verify: "<P> &eYour verified session was invalidated. Please reconnect to verify your account again."
+
+# Account management result messages.
+account:
+  # Sent after an account update succeeds.
+  success: "<P> &aAccount updated."
+  # Sent when account creation conflicts with an existing account.
+  already-exists: "<P> &cThis account already exists."
+  # Sent when supplied account data is invalid.
+  invalid: "<P> &cInvalid account data."
+  # Sent when a UUID argument is invalid.
+  invalid-uuid: "<P> &cInvalid account UUID."
+  # Sent when an account type argument is invalid.
+  invalid-type: "<P> &cInvalid account type."
+  # Sent when an account update fails.
+  error: "<P> &cCould not update account data."
+  # Sent when a protected premium/Bedrock name cannot be used as offline.
+  name-locked: "<P> &cThis name is protected by a premium or Bedrock identity."
+  # Sent when an admin lookup finds no account.
+  # Placeholders: {player}.
+  not-found: "<P> &cNo registered account found for &f{player}&c."
+  # Sent after an admin unregisters an account.
+  # Placeholders: {player}.
+  deleted: "<P> &aRegistration removed for &f{player}&a."
+
+# Root /pal command messages.
+root:
+  # Runtime info line.
+  # Placeholders: {version}, {platform}.
+  info: "<P> &7PAL &f{version} &7running on &f{platform}&7."
+  # One command entry in help output.
+  # Placeholders: {command}, {description}.
+  help-entry: "<P> &f/pal {command} &8- &7{description}"
+
+# Reserved command-name messages.
+reserved:
+  # Sent when another feature reserves a command label.
+  # Placeholders: {command}, {feature}.
+  command: "<P> &7The command &f/{command} &7is reserved for {feature}."
+  # Sent when an admin subcommand name is reserved.
+  # Placeholders: {command}.
+  subcommand: "<P> &7The subcommand &f/pal {command} &7is reserved for admin tooling."
+
+# Premium Java account messages.
+premium:
+  # Sent after automatic premium/Bedrock login.
+  # Placeholders: {type}.
+  auto-login: "<P> &aAuthenticated with &f{type} &aidentity."
+  # Sent when FastLogin is detected.
+  fastlogin-detected: "<P> FastLogin detected. PAL will use it for premium checks."
+  # Sent when premium verification cannot run and password login is used.
+  offline-fallback: "<P> &ePremium verification is unavailable. Use the normal login flow."
+  # Sent after switching to premium mode.
+  enabled: "<P> &aYour account now uses premium mode."
+  # Sent when the account is already premium.
+  already-enabled: "<P> &eYour account is already in premium mode."
+  # Sent when premium verification is required but fails.
+  # Placeholders: {reason}.
+  verify-required: "<P> &cPAL could not verify premium ownership: &f{reason}&c."
+
+# Offline/cracked account messages.
+cracked:
+  # Sent after switching to offline mode.
+  enabled: "<P> &aYour account now uses offline mode."
+  # Sent when the account is already offline.
+  already-enabled: "<P> &eYour account is already in offline mode."
+  # Sent when switching to offline mode requires creating a password.
+  password-required: "<P> &cThis account has no password yet. Use &f/cracked confirm <password> <password>&c."
+
+# Security challenge messages.
+security:
+  # Sent when lockout is active.
+  locked: "<P> &cToo many failed attempts. Try again later."
+  # Captcha prompt.
+  # Placeholders: {captcha}.
+  captcha: "<P> Type &f{captcha}&7 to continue."
+  # Sent when 2FA is required for login.
+  two-factor-required: "<P> Use &f/pal2fa <code>&7 to continue."
+  # Sent after a valid 2FA code.
+  two-factor-success: "<P> &aTwo-factor code accepted."
+  # Sent after an invalid 2FA code.
+  two-factor-invalid: "<P> &cInvalid two-factor code."
+  # Sent after too many invalid 2FA attempts.
+  two-factor-too-many: "<P> &cToo many invalid two-factor attempts. Login again."
+  # Generic 2FA processing error.
+  two-factor-error: "<P> &cCould not process two-factor authentication."
+  # Sent when 2FA commands are used while 2FA is disabled globally.
+  two-factor-disabled: "<P> &cTwo-factor authentication is disabled."
+  # Sent when disabling/checking 2FA but the account has no 2FA enabled.
+  two-factor-not-enabled: "<P> &cTwo-factor authentication is not enabled for this account."
+  # Sent when setup is attempted on an account that already has 2FA.
+  two-factor-already-enabled: "<P> &eTwo-factor authentication is already enabled."
+  # Sent when a 2FA login command has no pending challenge.
+  two-factor-no-pending: "<P> &cNo pending two-factor login was found."
+  # Sent when confirming setup without starting setup first.
+  two-factor-no-setup: "<P> &cNo pending two-factor setup was found. Use &f/pal2fa setup&c."
+  # Sent during 2FA setup.
+  # Placeholders: {secret}, {uri}.
+  two-factor-setup: "<P> &eAdd this TOTP secret to your authenticator app: &f{secret}<n><P> &7URI: &f{uri}<n><P> &7Then run &f/pal2fa confirm <code>&7."
+  # Sent after enabling 2FA.
+  # Placeholders: {codes}.
+  two-factor-enabled: "<P> &aTwo-factor authentication enabled.<n><P> &eBackup codes: &f{codes}"
+  # Sent after disabling 2FA successfully.
+  two-factor-disabled-success: "<P> &aTwo-factor authentication disabled."
+
+# Admin command messages.
+admin:
+  # Sent after admin reload.
+  reloaded: "<P> &7Configuration and commands reloaded."
+  # Sent when a sender lacks a specific admin permission.
+  # Placeholders: {permission}.
+  no-sub-permission: "<P> &cYou do not have permission: &f{permission}"
+  # Usage for account inspection.
+  usage-account: "<P> &cUsage: &f/pal account <player>"
+  # Usage for session inspection/clear root.
+  usage-session: "<P> &cUsage: &f/pal session <player|clear> [player]"
+  # Usage for session clear.
+  usage-session-clear: "<P> &cUsage: &f/pal session clear <player>"
+  # Usage for force-login.
+  usage-force-login: "<P> &cUsage: &f/pal force-login <player>"
+  # Usage for force-logout.
+  usage-force-logout: "<P> &cUsage: &f/pal force-logout <player>"
+  # Usage for reset-password.
+  usage-reset-password: "<P> &cUsage: &f/pal reset-password <player> <password>"
+  # Usage for admin unregister.
+  usage-unregister: "<P> &cUsage: &f/pal unregister <player>"
+  # Sent when a command requires an online player.
+  # Placeholders: {player}.
+  player-online-required: "<P> &cPlayer &f{player} &cmust be online."
+  # Sent when account inspection fails.
+  # Placeholders: {player}.
+  account-error: "<P> &cCould not inspect account &f{player}&c."
+  # Account inspection header.
+  # Placeholders: {player}.
+  account-header: "<P> &7Account: &f{player}"
+  # Account UUID line.
+  # Placeholders: {uuid}.
+  account-uuid: "<P> &7UUID: &f{uuid}"
+  # Account type/status line.
+  # Placeholders: {type}, {status}.
+  account-type: "<P> &7Type: &f{type} &8| &7Status: &f{status}"
+  # Account registration timestamp line.
+  # Placeholders: {registered}.
+  account-registered: "<P> &7Registered: &f{registered}"
+  # Account last-login timestamp line.
+  # Placeholders: {last_login}.
+  account-last-login: "<P> &7Last login: &f{last_login}"
+  # Sent when a session exists.
+  # Placeholders: {player}, {source}.
+  session-active: "<P> &aActive session for &f{player} &8(&7{source}&8)&a."
+  # Sent when no session exists.
+  # Placeholders: {player}.
+  session-missing: "<P> &eNo active session for &f{player}&e."
+  # Sent after force-login succeeds.
+  # Placeholders: {player}.
+  force-login: "<P> &aSession created for &f{player}&a."
+  # Sent after force-login fails.
+  # Placeholders: {player}.
+  force-login-error: "<P> &cCould not force login &f{player}&c."
+  # Sent when force-login cannot find a valid online registered account.
+  # Placeholders: {player}.
+  force-login-missing: "<P> &cNo online registered account found for &f{player}&c."
+  # Sent after force-logout succeeds.
+  # Placeholders: {player}.
+  force-logout: "<P> &aSession invalidated for &f{player}&a."
+  # Sent after force-logout fails.
+  # Placeholders: {player}.
+  force-logout-error: "<P> &cCould not force logout &f{player}&c."
+  # Sent after password reset succeeds.
+  # Placeholders: {player}.
+  reset-password: "<P> &aPassword reset and sessions invalidated for &f{player}&a."
+  # Sent when reset-password receives an empty password.
+  reset-password-empty: "<P> &cThe new password cannot be empty."
+  # Sent after password reset fails.
+  # Placeholders: {player}.
+  reset-password-error: "<P> &cCould not reset password for &f{player}&c."
+  # Sent after admin unregister succeeds.
+  # Placeholders: {player}.
+  unregister: "<P> &aRegistration removed for &f{player}&a."
+  # Sent after admin unregister fails.
+  # Placeholders: {player}.
+  unregister-error: "<P> &cCould not unregister &f{player}&c."
+
+# Migration/import messages.
+migration:
+  # Basic migration usage.
+  usage: "<P> &7Usage: &f/pal migrate <all|provider>"
+  # Migration usage with provider list.
+  # Placeholders: {providers}.
+  usage-providers: "<P> &7Usage: &f/pal migrate <all|{providers}>"
+  # Migration completion summary.
+  # Placeholders: {accounts}.
+  completed: "<P> &aMigration completed: &f{accounts} &aaccounts."
+  # Migration detailed completion summary.
+  # Placeholders: {accounts}, {skipped}, {failed}.
+  completed-detail: "<P> &aMigration completed: &f{accounts} &aaccounts &8(&7skipped {skipped}, failed {failed}&8)&a."
+  # Migration failure message.
+  # Placeholders: {reason}.
+  failed: "<P> &cMigration failed: &f{reason}"
+
+# Messages sent when realm/pre-auth restrictions block player actions.
+pre-auth:
+  # Sent when a backend rejects direct connections outside the proxy.
+  proxy-required: "<P> &cPlease connect through the network proxy."
+  # Sent when movement is blocked.
+  move: "<P> &cYou must authenticate before moving."
+  # Sent when teleporting is blocked.
+  teleport: "<P> &cYou must authenticate before teleporting."
+  # Sent when chat is blocked.
+  chat: "<P> &cYou must authenticate before chatting."
+  # Sent when command usage is blocked.
+  command: "<P> &cYou must authenticate before using commands."
+  # Sent when inventory access is blocked.
+  inventory: "<P> &cYou must authenticate before using inventories."
+  # Sent when damage is blocked.
+  damage: "<P> &cYou must authenticate before taking damage."
+  # Sent when block interaction is blocked.
+  block: "<P> &cYou must authenticate before changing blocks."
+  # Sent when item movement is blocked.
+  item: "<P> &cYou must authenticate before moving items."

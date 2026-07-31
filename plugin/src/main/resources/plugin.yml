@@ -1,0 +1,21 @@
+# Bukkit plugin entrypoint class.
+main: com.bitaspire.pal.PALPlugin
+
+name: PAL
+version: '${version}'
+prefix: PAL
+authors: [ CroaBeast ]
+api-version: 1.13
+
+folia-supported: true
+
+softdepend:
+  - FastLogin
+  - PlaceholderAPI
+  - LuckPerms
+  - floodgate
+  - Geyser-Spigot
+  - AuthMe
+  - nLogin
+  - OpeNLogin
+  - LibreLogin

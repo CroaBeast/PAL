@@ -1,0 +1,134 @@
+# Premium, cracked/offline, and Bedrock identity settings.
+premium:
+  # Master switch for premium identity handling.
+  # Values: true, false.
+  enabled: true
+
+  # Account mode policy.
+  # Values:
+  # - HYBRID: allow premium, Bedrock, and offline/cracked accounts.
+  # - PREMIUM_ONLY: only verified premium/Bedrock identities should pass.
+  # - OFFLINE_ONLY: do not use premium identity auto-login.
+  mode: HYBRID
+
+  # Provider order for identity decisions.
+  # Values:
+  # - FAST_LOGIN: use FastLogin decisions when available.
+  # - PAL: use PAL native resolver.
+  # - MANUAL: use the player's stored account preference.
+  provider-priority:
+    - FAST_LOGIN
+    - PAL
+    - MANUAL
+
+  # FastLogin integration settings.
+  fast-login:
+    # Enables FastLogin as an identity provider.
+    # Values: true, false.
+    enabled: true
+    # Requires FastLogin to be present for premium flow.
+    # Values: true, false.
+    required: false
+    # Automatically detects FastLogin at runtime.
+    # Values: true, false.
+    auto-detect: true
+    # Respects a player's stored premium/offline preference when possible.
+    # Values: true, false.
+    respect-player-choice: true
+
+  # PAL native resolver settings.
+  pal-resolver:
+    # Enables PAL's native Mojang/profile resolver.
+    # Values: true, false.
+    enabled: true
+    # Cache duration for Mojang profile lookups.
+    cache-minutes: 1440
+    # Maximum time to wait for Mojang/profile requests.
+    timeout-ms: 5000
+    # Name lookups alone must not be treated as proof of ownership.
+    # Values: true, false.
+    trust-name-lookup: false
+    # Required proof before auto-login or premium upgrade.
+    # Values:
+    # - SESSION_VERIFICATION: require a verified login/session decision.
+    ownership-proof: SESSION_VERIFICATION
+    # Verification strategy for PAL native checks.
+    # Values:
+    # - SECURE_SESSION: require session/login-phase proof.
+    verification-mode: SECURE_SESSION
+    # Treats Bukkit online-mode as Mojang-verified proof.
+    # Values: true, false.
+    bukkit-online-mode-proof: true
+    # Behavior when Mojang lookup or verification fails.
+    # Values:
+    # - OFFLINE_LOGIN: continue with password login.
+    fallback-on-mojang-error: OFFLINE_LOGIN
+
+  # Proxy/Bukkit login-phase protocol settings.
+  protocol:
+    # Enables protocol-assisted identity decisions.
+    # Values: true, false.
+    enabled: true
+    # Protocol mode.
+    # Values:
+    # - AUTO: use PAL native protocol when the platform supports it.
+    # - PAL_NATIVE: force PAL native protocol.
+    # - DISABLED: disable protocol-assisted checks.
+    mode: AUTO
+    # Requires login-phase proof before treating an account as verified.
+    # Values: true, false.
+    phase-required: true
+    # Maximum time to wait for protocol proof.
+    timeout-ms: 5000
+
+  # Java premium account behavior.
+  premium-accounts:
+    # Creates premium accounts automatically after verified login.
+    # Values: true, false.
+    auto-register: true
+    # Logs premium accounts in automatically after verified login.
+    # Values: true, false.
+    auto-login: true
+    # Converts matching offline accounts to premium after verified ownership.
+    # Values: true, false.
+    upgrade-offline-on-verified-login: true
+    # Stores premium accounts with Mojang UUIDs.
+    # Values: true, false.
+    use-premium-uuid: true
+    # Blocks cracked users from taking a known premium name.
+    # Values: true, false.
+    protect-premium-name-from-offline: true
+    # Allows a premium account to switch itself back to offline/cracked mode.
+    # Values: true, false.
+    allow-switch-to-offline: false
+
+  # Offline/cracked account behavior.
+  offline-accounts:
+    # Enables password-based offline accounts.
+    # Values: true, false.
+    enabled: true
+    # Requires offline accounts to have a password.
+    # Values: true, false.
+    require-password: true
+    # Behavior when an offline player uses a known premium name.
+    # Values:
+    # - ASK: require explicit player choice/flow.
+    # - BLOCK: deny the offline registration/login.
+    # - ALLOW: allow offline use.
+    block-if-premium-name-exists: ASK
+
+  # Bedrock account behavior.
+  bedrock:
+    # Floodgate-specific Bedrock integration.
+    floodgate:
+      # Enables Floodgate Bedrock account detection.
+      # Values: true, false.
+      enabled: true
+      # Logs Bedrock players in automatically when Floodgate verifies them.
+      # Values: true, false.
+      auto-login: true
+      # Account type for unlinked Bedrock accounts.
+      # Values:
+      # - BEDROCK: store unlinked Bedrock as Bedrock accounts.
+      # - PREMIUM: store linked Java identities as premium accounts.
+      account-type: BEDROCK

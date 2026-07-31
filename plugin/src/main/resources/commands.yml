@@ -1,0 +1,348 @@
+# Dynamic command registration.
+commands:
+  # Main admin command group.
+  pal:
+    # Bukkit command label to register.
+    name: pal
+    # Registers this command when true.
+    # Values: true, false.
+    enabled: true
+    # Allows PAL to replace an already-registered command with the same label.
+    # Values: true, false.
+    override-existing: false
+    # Permission required to use the command.
+    permission: pal.admin
+    # Bukkit default permission state.
+    # Values: true, false, op, not op.
+    default: op
+    # Command description shown in help output.
+    description: "PAL administration command."
+    # Usage text shown when arguments are invalid.
+    usage: "/pal <info|reload|help>"
+    # Message shown when the sender lacks permission.
+    permission-message: "<P> &cYou do not have permission to use PAL admin commands."
+    # Alternative command labels.
+    aliases: [ palauth ]
+    # Admin subcommands below /pal.
+    subcommands:
+      # Shows runtime plugin information.
+      info:
+        # Enables this subcommand.
+        # Values: true, false.
+        enabled: true
+        # Permission required to use this subcommand.
+        permission: pal.admin.info
+        # Bukkit default permission state.
+        # Values: true, false, op, not op.
+        default: op
+        # Help description.
+        description: "Shows plugin information."
+      # Reloads PAL config and command definitions.
+      reload:
+        # Enables this subcommand.
+        # Values: true, false.
+        enabled: true
+        # Permission required to use this subcommand.
+        permission: pal.admin.reload
+        # Bukkit default permission state.
+        # Values: true, false, op, not op.
+        default: op
+        # Help description.
+        description: "Reloads configuration and dynamic commands."
+      # Shows admin command help.
+      help:
+        # Enables this subcommand.
+        # Values: true, false.
+        enabled: true
+        # Permission required to use this subcommand.
+        permission: pal.admin.help
+        # Bukkit default permission state.
+        # Values: true, false, op, not op.
+        default: op
+        # Help description.
+        description: "Shows available admin commands."
+      # Inspects account data.
+      account:
+        # Enables this subcommand.
+        # Values: true, false.
+        enabled: true
+        # Permission required to use this subcommand.
+        permission: pal.admin.account
+        # Bukkit default permission state.
+        # Values: true, false, op, not op.
+        default: op
+        # Help description.
+        description: "Manages account data."
+      # Inspects or clears auth sessions.
+      session:
+        # Enables this subcommand.
+        # Values: true, false.
+        enabled: true
+        # Permission required to use this subcommand.
+        permission: pal.admin.session
+        # Bukkit default permission state.
+        # Values: true, false, op, not op.
+        default: op
+        # Help description.
+        description: "Manages active auth sessions."
+      # Creates an authenticated session for an online player.
+      force-login:
+        # Enables this subcommand.
+        # Values: true, false.
+        enabled: true
+        # Permission required to use this subcommand.
+        permission: pal.admin.force-login
+        # Bukkit default permission state.
+        # Values: true, false, op, not op.
+        default: op
+        # Help description.
+        description: "Forces a player session to authenticated."
+      # Invalidates an online player's session.
+      force-logout:
+        # Enables this subcommand.
+        # Values: true, false.
+        enabled: true
+        # Permission required to use this subcommand.
+        permission: pal.admin.force-logout
+        # Bukkit default permission state.
+        # Values: true, false, op, not op.
+        default: op
+        # Help description.
+        description: "Forces a player session to unauthenticated."
+      # Sets a new password for a player account.
+      reset-password:
+        # Enables this subcommand.
+        # Values: true, false.
+        enabled: true
+        # Permission required to use this subcommand.
+        permission: pal.admin.reset-password
+        # Bukkit default permission state.
+        # Values: true, false, op, not op.
+        default: op
+        # Help description.
+        description: "Resets a player's password."
+      # Removes a player account.
+      unregister:
+        # Enables this subcommand.
+        # Values: true, false.
+        enabled: true
+        # Permission required to use this subcommand.
+        permission: pal.admin.unregister
+        # Bukkit default permission state.
+        # Values: true, false, op, not op.
+        default: op
+        # Help description.
+        description: "Removes a player's account registration."
+      # Imports accounts from supported auth plugins.
+      migrate:
+        # Enables this subcommand.
+        # Values: true, false.
+        enabled: true
+        # Permission required to use this subcommand.
+        permission: pal.admin.migrate
+        # Bukkit default permission state.
+        # Values: true, false, op, not op.
+        default: op
+        # Help description.
+        description: "Runs account data migrations."
+
+  # Player login command.
+  login:
+    # Bukkit command label to register.
+    name: login
+    # Registers this command when true.
+    # Values: true, false.
+    enabled: true
+    # Allows PAL to replace an already-registered command with the same label.
+    # Values: true, false.
+    override-existing: false
+    # Permission required to use the command.
+    permission: pal.command.login
+    # Bukkit default permission state.
+    # Values: true, false, op, not op.
+    default: true
+    # Command description shown in help output.
+    description: "Logs into a protected account."
+    # Alternative command labels.
+    aliases: [ l ]
+    # Usage text shown when arguments are invalid.
+    usage: "/login <password>"
+    # Message shown when the sender lacks permission.
+    permission-message: "<P> &cYou do not have permission to login."
+
+  # Player registration command.
+  register:
+    # Bukkit command label to register.
+    name: register
+    # Registers this command when true.
+    # Values: true, false.
+    enabled: true
+    # Allows PAL to replace an already-registered command with the same label.
+    # Values: true, false.
+    override-existing: false
+    # Permission required to use the command.
+    permission: pal.command.register
+    # Bukkit default permission state.
+    # Values: true, false, op, not op.
+    default: true
+    # Command description shown in help output.
+    description: "Registers a protected account."
+    # Alternative command labels.
+    aliases: [ reg ]
+    # Usage text shown when arguments are invalid.
+    usage: "/register <password> <password>"
+    # Message shown when the sender lacks permission.
+    permission-message: "<P> &cYou do not have permission to register."
+
+  # Password change command.
+  changepassword:
+    # Bukkit command label to register.
+    name: changepassword
+    # Registers this command when true.
+    # Values: true, false.
+    enabled: true
+    # Allows PAL to replace an already-registered command with the same label.
+    # Values: true, false.
+    override-existing: false
+    # Permission required to use the command.
+    permission: pal.command.changepassword
+    # Bukkit default permission state.
+    # Values: true, false, op, not op.
+    default: true
+    # Command description shown in help output.
+    description: "Changes the current account password."
+    # Alternative command labels.
+    aliases: [ changepw, cpw ]
+    # Usage text shown when arguments are invalid.
+    usage: "/changepassword <old-password> <new-password>"
+    # Message shown when the sender lacks permission.
+    permission-message: "<P> &cYou do not have permission to change your password."
+
+  # Manual logout command.
+  logout:
+    # Bukkit command label to register.
+    name: logout
+    # Registers this command when true.
+    # Values: true, false.
+    enabled: true
+    # Allows PAL to replace an already-registered command with the same label.
+    # Values: true, false.
+    override-existing: false
+    # Permission required to use the command.
+    permission: pal.command.logout
+    # Bukkit default permission state.
+    # Values: true, false, op, not op.
+    default: true
+    # Command description shown in help output.
+    description: "Logs out from the current session."
+    # Alternative command labels.
+    aliases: []
+    # Usage text shown when arguments are invalid.
+    usage: "/logout"
+    # Message shown when the sender lacks permission.
+    permission-message: "<P> &cYou do not have permission to logout."
+
+  # Player self-unregister command.
+  unregister:
+    # Bukkit command label to register.
+    name: unregister
+    # Registers this command when true.
+    # Values: true, false.
+    enabled: true
+    # Allows PAL to replace an already-registered command with the same label.
+    # Values: true, false.
+    override-existing: false
+    # Permission required to use the command.
+    permission: pal.command.unregister
+    # Bukkit default permission state.
+    # Values: true, false, op, not op.
+    default: true
+    # Command description shown in help output.
+    description: "Deletes the current account registration."
+    # Alternative command labels.
+    aliases: []
+    # Usage text shown when arguments are invalid.
+    usage: "/unregister confirm"
+    # Message shown when the sender lacks permission.
+    permission-message: "<P> &cYou do not have permission to unregister."
+    # Requires the literal confirm argument before deleting the account.
+    # Values: true, false.
+    require-confirmation: true
+
+  # Switches a player account to premium mode.
+  premium:
+    # Bukkit command label to register.
+    name: premium
+    # Registers this command when true.
+    # Values: true, false.
+    enabled: true
+    # Allows PAL to replace an already-registered command with the same label.
+    # Values: true, false.
+    override-existing: false
+    # Permission required to use the command.
+    permission: pal.command.premium
+    # Bukkit default permission state.
+    # Values: true, false, op, not op.
+    default: true
+    # Command description shown in help output.
+    description: "Switches the current account to premium mode."
+    # Alternative command labels.
+    aliases: []
+    # Usage text shown when arguments are invalid.
+    usage: "/premium confirm"
+    # Message shown when the sender lacks permission.
+    permission-message: "<P> &cYou do not have permission to change premium mode."
+    # Requires the literal confirm argument before switching account type.
+    # Values: true, false.
+    require-confirmation: true
+
+  # Switches a player account to offline/cracked mode.
+  cracked:
+    # Bukkit command label to register.
+    name: cracked
+    # Registers this command when true.
+    # Values: true, false.
+    enabled: true
+    # Allows PAL to replace an already-registered command with the same label.
+    # Values: true, false.
+    override-existing: false
+    # Permission required to use the command.
+    permission: pal.command.cracked
+    # Bukkit default permission state.
+    # Values: true, false, op, not op.
+    default: true
+    # Command description shown in help output.
+    description: "Switches the current account to offline mode."
+    # Alternative command labels.
+    aliases: [ offline ]
+    # Usage text shown when arguments are invalid.
+    usage: "/cracked confirm"
+    # Message shown when the sender lacks permission.
+    permission-message: "<P> &cYou do not have permission to change offline mode."
+    # Requires the literal confirm argument before switching account type.
+    # Values: true, false.
+    require-confirmation: true
+
+  # Two-factor authentication command.
+  two-factor:
+    # Bukkit command label to register.
+    name: pal2fa
+    # Registers this command when true.
+    # Values: true, false.
+    enabled: true
+    # Allows PAL to replace an already-registered command with the same label.
+    # Values: true, false.
+    override-existing: false
+    # Permission required to use the command.
+    permission: pal.command.2fa
+    # Bukkit default permission state.
+    # Values: true, false, op, not op.
+    default: true
+    # Command description shown in help output.
+    description: "Manages two-factor authentication."
+    # Alternative command labels.
+    aliases: [ 2fa ]
+    # Usage text shown when arguments are invalid.
+    usage: "/pal2fa <code|setup|confirm|disable|recover>"
+    # Message shown when the sender lacks permission.
+    permission-message: "<P> &cYou do not have permission to manage two-factor authentication."

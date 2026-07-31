@@ -1,0 +1,104 @@
+# Optional third-party plugin integrations.
+integrations:
+  # PlaceholderAPI expansion support.
+  placeholderapi:
+    # Enables PlaceholderAPI integration when the plugin is installed.
+    # Values: true, false.
+    enabled: true
+    # Registers %pal_*% placeholders.
+    # Values: true, false.
+    # Placeholders:
+    # - authenticated
+    # - session_source
+    # - session_id
+    # - session_expires
+    # - 2fa_pending
+    # - bridge_enabled
+    # - bridge_mode
+    # - storage_type
+    # - fastlogin_available
+    # - floodgate_available
+    # - native_available
+    register-expansion: true
+
+  # LuckPerms context support.
+  luckperms:
+    # Enables LuckPerms integration when the plugin is installed.
+    # Values: true, false.
+    enabled: true
+    # Registers PAL contexts for conditional permissions.
+    # Values: true, false.
+    # Contexts:
+    # - pal:authenticated
+    # - pal:session_source
+    # - pal:2fa_pending
+    # - pal:bridge_mode
+    # - pal:storage_type
+    check-contexts: true
+
+  # FastLogin premium verification integration.
+  fastlogin:
+    # Enables FastLogin hooks when the plugin is installed.
+    # Values: true, false.
+    enabled: true
+    # Prefer FastLogin identity decisions over PAL native resolver decisions.
+    # Values: true, false.
+    prefer-over-pal-resolver: true
+
+  # Floodgate Bedrock identity integration.
+  floodgate:
+    # Enables Floodgate hooks when the plugin is installed.
+    # Values: true, false.
+    enabled: true
+    # Treats Floodgate players as Bedrock identities automatically.
+    # Values: true, false.
+    auto-detect-bedrock: true
+
+  # Geyser detection support.
+  geyser:
+    # Enables Geyser detection when the plugin is installed.
+    # Values: true, false.
+    enabled: true
+
+  # Account import provider detection.
+  importers:
+    # AuthMe importer detection.
+    authme:
+      # Enables this importer.
+      # Values: true, false.
+      enabled: true
+      # Attempts to detect the provider's config/database path automatically.
+      # Values: true, false.
+      detect-config: true
+    # LoginSecurity importer detection.
+    loginsecurity:
+      # Enables this importer.
+      # Values: true, false.
+      enabled: true
+      # Attempts to detect the provider's config/database path automatically.
+      # Values: true, false.
+      detect-config: true
+    # LibreLogin importer detection.
+    librelogin:
+      # Enables this importer.
+      # Values: true, false.
+      enabled: true
+      # Attempts to detect the provider's config/database path automatically.
+      # Values: true, false.
+      detect-config: true
+    # nLogin importer detection.
+    nlogin:
+      # Enables this importer.
+      # Values: true, false.
+      enabled: true
+      # Attempts to detect the provider's config/database path automatically.
+      # Values: true, false.
+      detect-config: true
+    # OpeNLogin importer detection.
+    openlogin:
+      # Enables this importer.
+      # Values: true, false.
+      enabled: true
+      # Attempts to detect the provider's config/database path automatically.
+      # Values: true, false.
+      detect-config: true

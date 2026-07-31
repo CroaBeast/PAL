@@ -1,0 +1,365 @@
+# Authentication and pre-auth security settings.
+auth:
+  # New account registration rules.
+  registration:
+    # Allows players to create new accounts.
+    # Values: true, false.
+    enabled: true
+    # Requires players to repeat/confirm sensitive registration actions.
+    # Values: true, false.
+    require-confirmation: true
+    # Maximum number of accounts allowed from one IP address.
+    max-accounts-per-ip: 3
+    # Java regular expression used to validate player names.
+    allowed-name-pattern: "^[A-Za-z0-9_]{3,16}$"
+
+  # Login attempt behavior.
+  login:
+    # Seconds a player may stay unauthenticated before timeout handling runs.
+    timeout-seconds: 90
+    # Maximum failed password attempts before security lockout/captcha handling.
+    max-attempts: 5
+    # Kicks the player when timeout-seconds expires.
+    # Values: true, false.
+    kick-on-timeout: true
+    # Hides or protects location-related data before authentication where supported.
+    # Values: true, false.
+    hide-location-before-auth: true
+    # Hides or protects inventory-related data before authentication where supported.
+    # Values: true, false.
+    hide-inventory-before-auth: true
+
+  # Password policy and hashing.
+  passwords:
+    # Password hash algorithm.
+    # Values:
+    # - PBKDF2_SHA256: default Java 8-compatible hasher.
+    algorithm: PBKDF2_SHA256
+    # Minimum accepted password length.
+    min-length: 6
+    # Maximum accepted password length.
+    max-length: 64
+    # Rejects passwords containing the username.
+    # Values: true, false.
+    block-username: true
+    # Rejects known common passwords.
+    # Values: true, false.
+    block-common-passwords: true
+    # Requires repeated password confirmation during registration.
+    # Values: true, false.
+    require-repeat-on-register: true
+    # Rewrites old password hashes using the current algorithm after successful login.
+    # Values: true, false.
+    rehash-on-login: true
+
+  # Auth session behavior.
+  sessions:
+    # Enables persistent auth sessions.
+    # Values: true, false.
+    enabled: true
+    # Session lifetime in minutes.
+    duration-minutes: 30
+    # Requires the same IP address for session reuse.
+    # Values: true, false.
+    bind-ip: true
+    # Requires the same player name for session reuse.
+    # Values: true, false.
+    bind-username: true
+    # Invalidates sessions when the account password changes.
+    # Values: true, false.
+    invalidate-on-password-change: true
+
+  # Legacy/default restrictions used by the AUTH realm unless auth.realms.auth overrides them.
+  pre-auth-restrictions:
+    # Blocks position movement before authentication.
+    # Values: true, false.
+    movement: true
+    # Blocks chat before authentication.
+    # Values: true, false.
+    chat: true
+    # Blocks commands before authentication except allowed-commands.
+    # Values: true, false.
+    commands: true
+    # Blocks inventory clicks, drags, and opens before authentication.
+    # Values: true, false.
+    inventory-click: true
+    # Blocks dropping items before authentication.
+    # Values: true, false.
+    item-drop: true
+    # Blocks picking up items before authentication.
+    # Values: true, false.
+    item-pickup: true
+    # Blocks placing blocks before authentication.
+    # Values: true, false.
+    block-place: true
+    # Blocks breaking blocks before authentication.
+    # Values: true, false.
+    block-break: true
+    # Blocks taking or dealing damage before authentication.
+    # Values: true, false.
+    damage: true
+    # Blocks teleport events before authentication.
+    # Values: true, false.
+    teleport: true
+    # Commands allowed while commands is true.
+    # Values: command labels without leading slash; namespaced labels are normalized.
+    allowed-commands:
+      - login
+      - l
+      - register
+      - reg
+      - pal2fa
+      - 2fa
+
+  # Logical Bukkit-side player realms/zones.
+  # These are not Mojang Realms. They are PAL profiles for one physical lobby/auth/limbo server.
+  realms:
+    # Default realm selection when no signed proxy message is accepted.
+    # Values:
+    # - AUTO: unauthenticated players use AUTH, authenticated players use LOBBY.
+    # - AUTH: force the auth profile.
+    # - LOBBY: force the lobby profile.
+    # - LIMBO: force the limbo profile.
+    default: AUTO
+    # Signed proxy role-message handling.
+    proxy-message:
+      # Allows Velocity/Bungee PAL to tell Bukkit whether the player entered as AUTH, LOBBY, or LIMBO.
+      # Values: true, false.
+      # Requires the same non-default bridge.sec.secret on Bukkit and proxy.
+      enabled: true
+
+    # Profile applied to unauthenticated players or proxy AUTH intent.
+    auth:
+      # Spawn location for this realm.
+      spawn:
+        # Teleports players to this spawn when entering the realm.
+        # Values: true, false.
+        enabled: false
+        # World name. Empty value means the player's current world.
+        world: world
+        # X coordinate.
+        x: 0.5
+        # Y coordinate.
+        y: 64.0
+        # Z coordinate.
+        z: 0.5
+        # Horizontal facing angle.
+        yaw: 0.0
+        # Vertical facing angle.
+        pitch: 0.0
+      # Potion effects applied while entering this realm.
+      # Values: EFFECT_NAME:LEVEL, for example BLINDNESS:1 or SLOW:2.
+      effects:
+        - BLINDNESS:1
+      # Interaction restrictions for this realm.
+      restrictions:
+        # Blocks position movement.
+        # Values: true, false.
+        movement: true
+        # Blocks chat.
+        # Values: true, false.
+        chat: true
+        # Blocks commands except allowed-commands.
+        # Values: true, false.
+        commands: true
+        # Blocks inventory clicks, drags, and opens.
+        # Values: true, false.
+        inventory-click: true
+        # Blocks dropping items.
+        # Values: true, false.
+        item-drop: true
+        # Blocks picking up items.
+        # Values: true, false.
+        item-pickup: true
+        # Blocks placing blocks.
+        # Values: true, false.
+        block-place: true
+        # Blocks breaking blocks.
+        # Values: true, false.
+        block-break: true
+        # Blocks taking or dealing damage.
+        # Values: true, false.
+        damage: true
+        # Blocks teleport events except PAL realm teleports.
+        # Values: true, false.
+        teleport: true
+        # Commands allowed while commands is true.
+        # Values: command labels without leading slash.
+        allowed-commands:
+          - login
+          - l
+          - register
+          - reg
+          - pal2fa
+          - 2fa
+
+    # Profile applied to authenticated lobby players or proxy LOBBY intent.
+    lobby:
+      # Spawn location for this realm.
+      spawn:
+        # Teleports players to this spawn when entering the realm.
+        # Values: true, false.
+        enabled: false
+        # World name. Empty value means the player's current world.
+        world: world
+        # X coordinate.
+        x: 0.5
+        # Y coordinate.
+        y: 64.0
+        # Z coordinate.
+        z: 0.5
+        # Horizontal facing angle.
+        yaw: 0.0
+        # Vertical facing angle.
+        pitch: 0.0
+      # Potion effects applied while entering this realm.
+      # Values: EFFECT_NAME:LEVEL. Empty list disables realm effects.
+      effects: []
+      # Interaction restrictions for this realm.
+      restrictions:
+        # Blocks position movement.
+        # Values: true, false.
+        movement: false
+        # Blocks chat.
+        # Values: true, false.
+        chat: false
+        # Blocks commands except allowed-commands.
+        # Values: true, false.
+        commands: false
+        # Blocks inventory clicks, drags, and opens.
+        # Values: true, false.
+        inventory-click: false
+        # Blocks dropping items.
+        # Values: true, false.
+        item-drop: false
+        # Blocks picking up items.
+        # Values: true, false.
+        item-pickup: false
+        # Blocks placing blocks.
+        # Values: true, false.
+        block-place: false
+        # Blocks breaking blocks.
+        # Values: true, false.
+        block-break: false
+        # Blocks taking or dealing damage.
+        # Values: true, false.
+        damage: false
+        # Blocks teleport events except PAL realm teleports.
+        # Values: true, false.
+        teleport: false
+        # Commands allowed while commands is true.
+        # Values: command labels without leading slash.
+        allowed-commands: []
+
+    # Profile applied to fallback/limbo redirects or proxy LIMBO intent.
+    limbo:
+      # Spawn location for this realm.
+      spawn:
+        # Teleports players to this spawn when entering the realm.
+        # Values: true, false.
+        enabled: false
+        # World name. Empty value means the player's current world.
+        world: world
+        # X coordinate.
+        x: 0.5
+        # Y coordinate.
+        y: 64.0
+        # Z coordinate.
+        z: 0.5
+        # Horizontal facing angle.
+        yaw: 0.0
+        # Vertical facing angle.
+        pitch: 0.0
+      # Potion effects applied while entering this realm.
+      # Values: EFFECT_NAME:LEVEL. Empty list disables realm effects.
+      effects: []
+      # Interaction restrictions for this realm.
+      restrictions:
+        # Blocks position movement.
+        # Values: true, false.
+        movement: true
+        # Blocks chat.
+        # Values: true, false.
+        chat: false
+        # Blocks commands except allowed-commands.
+        # Values: true, false.
+        commands: false
+        # Blocks inventory clicks, drags, and opens.
+        # Values: true, false.
+        inventory-click: true
+        # Blocks dropping items.
+        # Values: true, false.
+        item-drop: true
+        # Blocks picking up items.
+        # Values: true, false.
+        item-pickup: true
+        # Blocks placing blocks.
+        # Values: true, false.
+        block-place: true
+        # Blocks breaking blocks.
+        # Values: true, false.
+        block-break: true
+        # Blocks taking or dealing damage.
+        # Values: true, false.
+        damage: true
+        # Blocks teleport events except PAL realm teleports.
+        # Values: true, false.
+        teleport: true
+        # Commands allowed while commands is true.
+        # Values: command labels without leading slash.
+        allowed-commands: []
+
+  # Brute-force protection.
+  brute-force:
+    # Enables failed-attempt lockouts and throttles.
+    # Values: true, false.
+    enabled: true
+    # Rolling window in seconds used to count failed attempts.
+    window-seconds: 300
+    # Lockout duration in seconds after too many failed attempts.
+    lockout-seconds: 300
+    # Minimum delay in milliseconds between attempts from the same IP.
+    ip-throttle-ms: 750
+    # Minimum delay in milliseconds between attempts for the same username.
+    username-throttle-ms: 750
+    # Notifies admins when brute-force protection triggers.
+    # Values: true, false.
+    notify-admins: true
+
+  # Captcha challenge settings.
+  captcha:
+    # Enables captcha challenges after repeated failed attempts.
+    # Values: true, false.
+    enabled: true
+    # Number of failed attempts before a captcha is required.
+    trigger-after-failed-attempts: 3
+    # Captcha code length.
+    length: 5
+    # Captcha expiration time in seconds.
+    expires-seconds: 60
+
+  # Two-factor authentication settings.
+  two-factor:
+    # Enables 2FA features.
+    # Values: true, false.
+    enabled: false
+    # Enables TOTP authenticator-app codes.
+    # Values: true, false.
+    totp: true
+    # Enables backup recovery codes.
+    # Values: true, false.
+    backup-codes: true
+    # Permission that makes 2FA setup mandatory.
+    required-permission: "pal.security.2fa.required"
+    # Issuer name shown in authenticator apps.
+    issuer: "PAL"
+    # Number of TOTP digits.
+    digits: 6
+    # TOTP period in seconds.
+    period-seconds: 30
+    # Accepted TOTP time-window drift.
+    window: 1
+    # Number of backup codes generated during setup.
+    backup-code-amount: 8
+    # Maximum invalid 2FA attempts before the challenge fails.
+    max-attempts: 5

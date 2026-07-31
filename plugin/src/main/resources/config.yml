@@ -1,0 +1,48 @@
+########################
+#   PAL by CroaBeast   #
+# Player Advanced Login #
+########################
+
+# General plugin behavior that does not belong to one specific subsystem.
+options:
+  # Enables the update checker on startup.
+  # Values: true, false.
+  update-check: true
+
+  # Console logging presentation.
+  console:
+    # Enables color codes in console output when the platform supports them.
+    # Values: true, false.
+    colored: true
+    # Shows the message type/prefix in console log lines.
+    # Values: true, false.
+    show-message-type: true
+    # Enables verbose diagnostic output.
+    # Values: true, false.
+    debug: false
+
+  # Permission handling defaults.
+  permissions:
+    # false keeps vanilla OP behavior. true requires explicit PAL permissions even for OP players.
+    # Values: true, false.
+    override-op: false
+
+# Global message formatting tokens used by messages.yml and commands.yml.
+messages:
+  # Placeholder replaced with the configured prefix text.
+  prefix-key: "<P>"
+  # Text inserted wherever prefix-key appears.
+  prefix: " &b&lPAL &8>&7"
+  # Placeholder used by centered or title-like messages.
+  center-prefix: "<C>"
+  # Placeholder converted to a newline.
+  line-separator: "<n>"
+
+# Startup logging options.
+startup:
+  # Logs the detected server platform during startup.
+  # Values: true, false.
+  log-platform: true
+  # Logs detected optional integrations during startup.
+  # Values: true, false.
+  log-integrations: true
