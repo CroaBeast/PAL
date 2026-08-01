@@ -28,6 +28,17 @@ configurations.configureEach {
 tasks.named<ShadowJar>("shadowJar") {
     archiveBaseName.set("PAL-Velocity")
     archiveClassifier.set("")
+
+    exclude(
+        "META-INF/maven/**",
+        "org/intellij/**",
+        "org/jetbrains/**",
+        "INFO_BIN",
+        "INFO_SRC",
+        "LICENSE*",
+        "NOTICE*",
+        "README*"
+    )
 }
 
 tasks.build {

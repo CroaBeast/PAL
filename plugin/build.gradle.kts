@@ -23,7 +23,7 @@ dependencies {
     compileOnly("org.geysermc.floodgate:api:2.2.4-SNAPSHOT")
 
     takionShaded("me.croabeast.takion:shaded:1.5.1:all")
-    legacyHashers("org.mindrot:jbcrypt:0.4")
+    legacyHashers("org.mindrot:jbcrypt:0.4") { isTransitive = false }
 }
 
 val apiMainOutput = apiProject.extensions.getByType<SourceSetContainer>()["main"].output
@@ -51,11 +51,21 @@ tasks.named<ShadowJar>("shadowJar") {
 
     configurations = listOf(takionShaded, legacyHashers)
 
+    relocate("me.croabeast", "com.bitaspire.libs")
+    relocate("com.github.stefvanschie.inventoryframework", "com.bitaspire.libs.inventory")
+    relocate("org.bstats", "com.bitaspire.libs.bstats")
+    relocate("org.mindrot.jbcrypt", "com.bitaspire.libs.jbcrypt")
+
     exclude(
         "META-INF/**",
         "org/apache/commons/**",
         "org/intellij/**",
-        "org/jetbrains/**"
+        "org/jetbrains/**",
+        "INFO_BIN",
+        "INFO_SRC",
+        "LICENSE*",
+        "NOTICE*",
+        "README*"
     )
 }
 

@@ -11,6 +11,17 @@ dependencies {
 tasks.named<ShadowJar>("shadowJar") {
     archiveBaseName.set("PAL-Bungee")
     archiveClassifier.set("")
+
+    exclude(
+        "META-INF/maven/**",
+        "org/intellij/**",
+        "org/jetbrains/**",
+        "INFO_BIN",
+        "INFO_SRC",
+        "LICENSE*",
+        "NOTICE*",
+        "README*"
+    )
 }
 
 tasks.processResources {
