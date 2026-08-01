@@ -383,28 +383,7 @@ final class DatabaseSessionBridge implements SessionBridge {
     }
 
     private void loadDriver() throws SQLException {
-        String driver;
-        switch (config.getDatabaseType()) {
-            case SQLITE:
-                driver = "org.sqlite.JDBC";
-                break;
-            case MARIADB:
-                driver = "org.mariadb.jdbc.Driver";
-                break;
-            case POSTGRESQL:
-                driver = "org.postgresql.Driver";
-                break;
-            case MYSQL:
-            default:
-                driver = "com.mysql.cj.jdbc.Driver";
-                break;
-        }
-
-        try {
-            Class.forName(driver);
-        } catch (ClassNotFoundException exception) {
-            throw new SQLException("PAL database driver is not available: " + driver, exception);
-        }
+        ProxyStorageDrivers.resolve(config.getDatabaseType());
     }
 
     @NotNull

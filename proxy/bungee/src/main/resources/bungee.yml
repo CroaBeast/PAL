@@ -14,3 +14,11 @@ author: CroaBeast
 softDepends:
   - FastLogin
   - floodgate
+
+# Resolved by BungeeCord's LibraryLoader into the proxy's "libraries" folder.
+# Keep in sync with ProxyStorageDrivers.
+libraries:
+  - org.xerial:sqlite-jdbc:3.53.1.0
+  - com.mysql:mysql-connector-j:8.0.33
+  - org.mariadb.jdbc:mariadb-java-client:3.3.3
+  - org.postgresql:postgresql:42.7.3

@@ -1,10 +1,8 @@
 dependencies {
     api(project(":protocol:proxy"))
 
-    implementation("org.xerial:sqlite-jdbc:3.53.1.0")
-    implementation("com.mysql:mysql-connector-j:8.0.33")
-    implementation("org.mariadb.jdbc:mariadb-java-client:3.3.3")
-    implementation("org.postgresql:postgresql:42.7.3")
+    // Resolved at runtime: bungee.yml "libraries" on BungeeCord, ProxyStorageDrivers on Velocity.
+    testRuntimeOnly("org.xerial:sqlite-jdbc:3.53.1.0") { isTransitive = false }
 
     compileOnly("com.github.games647:fastlogin.core:1.12-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.2.4-SNAPSHOT")

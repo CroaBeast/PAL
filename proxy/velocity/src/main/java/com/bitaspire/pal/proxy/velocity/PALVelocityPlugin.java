@@ -4,6 +4,7 @@ import com.bitaspire.pal.proxy.PALAddon;
 import com.bitaspire.pal.proxy.Platform;
 import com.bitaspire.pal.proxy.bridge.BridgeOptions;
 import com.bitaspire.pal.proxy.bridge.ProxyBridgeConfig;
+import com.bitaspire.pal.proxy.bridge.ProxyStorageDrivers;
 import com.bitaspire.pal.proxy.bridge.SessionBridge;
 import com.bitaspire.pal.proxy.bridge.SessionBridgeListener;
 import com.bitaspire.pal.proxy.connection.ConnectionDecision;
@@ -87,6 +88,7 @@ public final class PALVelocityPlugin implements PALAddon {
     @Subscribe
     void onProxyInitialization(ProxyInitializeEvent event) {
         server.getChannelRegistrar().register(ROLE_CHANNEL);
+        ProxyStorageDrivers.install(dataFolder, jar -> server.getPluginManager().addToClasspath(this, jar.toPath()));
         reload();
         registerFastLoginHooks();
         logger.info("PAL Proxy initialized on Velocity with {} registered servers.", server.getAllServers().size());
