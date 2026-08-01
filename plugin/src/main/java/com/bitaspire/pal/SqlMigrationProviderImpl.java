@@ -151,6 +151,7 @@ final class SqlMigrationProviderImpl implements MigrationProvider {
     @NotNull
     private Connection open() throws SQLException {
         MigrationSourceOptions source = options.getSource();
+        StorageDrivers.resolve(plugin, source.getType());
 
         switch (source.getType()) {
             case SQLITE:

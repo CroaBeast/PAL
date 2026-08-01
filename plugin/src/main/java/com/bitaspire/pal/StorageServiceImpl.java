@@ -579,6 +579,7 @@ final class StorageServiceImpl extends AbstractService implements StorageService
             throw new SQLException("Could not create SQLite directory: " + parent.getAbsolutePath());
         }
 
+        StorageDrivers.resolve(api.getPlugin(), StorageType.SQLITE);
         connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
 
         try (Statement statement = connection.createStatement()) {
@@ -615,6 +616,7 @@ final class StorageServiceImpl extends AbstractService implements StorageService
                 throw new SQLException(type + " storage is not supported by the default PAL storage provider");
         }
 
+        StorageDrivers.resolve(api.getPlugin(), type);
         connection = DriverManager.getConnection(url, settings.getUsername(), settings.getPassword());
     }
 

@@ -6,7 +6,6 @@ val protocolProject = project(":protocol")
 val protocolMojangProject = project(":protocol:mojang")
 val protocolBukkitProject = project(":protocol:bukkit")
 val takionShaded: Configuration by configurations.creating
-val storageDrivers: Configuration by configurations.creating
 val legacyHashers: Configuration by configurations.creating
 
 dependencies {
@@ -24,10 +23,6 @@ dependencies {
     compileOnly("org.geysermc.floodgate:api:2.2.4-SNAPSHOT")
 
     takionShaded("me.croabeast.takion:shaded:1.5.1:all")
-    storageDrivers("org.xerial:sqlite-jdbc:3.53.1.0")
-    storageDrivers("com.mysql:mysql-connector-j:8.0.33")
-    storageDrivers("org.mariadb.jdbc:mariadb-java-client:3.3.3")
-    storageDrivers("org.postgresql:postgresql:42.7.3")
     legacyHashers("org.mindrot:jbcrypt:0.4")
 }
 
@@ -54,7 +49,7 @@ tasks.named<ShadowJar>("shadowJar") {
     from(protocolMojangMainOutput)
     from(protocolBukkitMainOutput)
 
-    configurations = listOf(takionShaded, storageDrivers, legacyHashers)
+    configurations = listOf(takionShaded, legacyHashers)
 
     exclude(
         "META-INF/**",
