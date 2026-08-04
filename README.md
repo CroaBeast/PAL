@@ -40,7 +40,7 @@ Network:
 1. Put PAL on the auth/lobby Bukkit server.
 2. Put the PAL proxy addon on Velocity or BungeeCord.
 3. Use remote SQL for accounts and sessions.
-4. Use `bridge.mode: REDIS` when Redis is available, or `DATABASE` when the proxy can access the same remote SQL database.
+4. Use `bridge.mode: DATABASE` by default when the proxy can access the same remote SQL database; switch to `REDIS` only when you want real-time Pub/Sub session updates.
 5. Set the same `bridge.sec.secret` on Bukkit and proxy.
 6. Block direct backend access with firewall rules, proxy forwarding secrets, or `bridge.backend.guard`.
 

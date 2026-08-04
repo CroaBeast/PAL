@@ -27,7 +27,7 @@ Free currently takes the secure path:
 
 ## Redis vs Database Bridge
 
-`REDIS` is the recommended network bridge because it provides signed session payloads and Pub/Sub updates.
+`DATABASE` is the default network bridge when the proxy and Bukkit side can share the same remote SQL database. `REDIS` remains available when a network needs real-time Pub/Sub session updates.
 
 `DATABASE` works without Redis, but the proxy sees updates through polling. This is acceptable for networks that can share a private remote SQL database, but it is not as immediate as Redis. Production `DATABASE` mode should keep `bridge.sec.require: true` and a non-default `bridge.sec.secret`, because the proxy will reject unsigned SQL sessions when signed sessions are required.
 

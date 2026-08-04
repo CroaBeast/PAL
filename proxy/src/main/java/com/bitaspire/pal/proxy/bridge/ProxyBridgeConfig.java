@@ -144,7 +144,7 @@ public final class ProxyBridgeConfig {
 
         return new ProxyBridgeConfig(
                 bool(values, "bridge.enabled", true),
-                Mode.from(string(values, "bridge.mode", "REDIS")),
+                Mode.from(string(values, "bridge.mode", "DATABASE")),
                 string(values, "bridge.net.auth", "auth"),
                 string(values, "bridge.net.lobby", "lobby"),
                 bool(values, "bridge.net.remember", true),
@@ -153,7 +153,7 @@ public final class ProxyBridgeConfig {
                 bool(values, "bridge.guard.required", true),
                 bool(values, "bridge.guard.premium", true),
                 bool(values, "bridge.guard.bedrock", true),
-                bool(values, "bridge.guard.proxy-auto-login", false),
+                bool(values, "bridge.guard.proxy-auto-login", true),
                 integer(values, "bridge.session.minutes", 30),
                 bool(values, "bridge.native.enabled", true),
                 integer(values, "bridge.native.timeout-ms", 5000),
@@ -299,7 +299,7 @@ public final class ProxyBridgeConfig {
             try {
                 return valueOf(normalized);
             } catch (IllegalArgumentException ignored) {
-                return REDIS;
+                return DATABASE;
             }
         }
     }

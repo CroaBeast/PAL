@@ -73,7 +73,7 @@ final class ConfigurationServiceImpl {
         YamlConfiguration config = load("bridge");
         if (!config.getBoolean("bridge.enabled", false)) return;
 
-        String mode = config.getString("bridge.mode", "REDIS");
+        String mode = config.getString("bridge.mode", "DATABASE");
         String secret = config.getString("bridge.sec.secret", "change-me");
         if ("REDIS".equalsIgnoreCase(mode) && "change-me".equalsIgnoreCase(secret)) {
             plugin.getLogger().warning("bridge.yml uses the default Redis shared secret. Change bridge.sec.secret before production.");

@@ -4,10 +4,10 @@ bridge:
   enabled: true
   # Session sync backend.
   # Values: REDIS, DATABASE, MEMORY, DISABLED.
-  # REDIS: real-time signed sessions plus Pub/Sub.
   # DATABASE: shared SQL session lookup with polling; works without Redis.
+  # REDIS: real-time signed sessions plus Pub/Sub.
   # MEMORY: local proxy memory only; useful for tests, not Bukkit <-> proxy sync.
-  mode: REDIS
+  mode: DATABASE
 
   # Logical network server names as configured in the proxy.
   net:

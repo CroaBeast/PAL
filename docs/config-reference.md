@@ -186,7 +186,7 @@ Bukkit/proxy session bridge configuration.
 | Key | Default | Description |
 | --- | --- | --- |
 | `bridge.enabled` | `false` on Bukkit | Enables bridge publishing. |
-| `bridge.mode` | `DATABASE` on Bukkit default | `REDIS`, `DATABASE`, `MEMORY` or `DISABLED`. |
+| `bridge.mode` | `DATABASE` | `DATABASE`, `REDIS`, `MEMORY` or `DISABLED`. |
 | `bridge.net.auth` | `auth` | Auth server name. |
 | `bridge.net.lobby` | `lobby` | Lobby server name. |
 | `bridge.net.remember` | `true` | Remembers original destination. |
@@ -202,7 +202,7 @@ Bukkit/proxy session bridge configuration.
 | `bridge.sec.skew` | `15` | Accepted timestamp skew for signed bridge payloads. |
 | `bridge.advice.sqlite` | `true` | Enables warnings when SQLite is used in network-like setups. |
 | `bridge.advice.sqlite-cap` | `4` | Minimum configured server count that triggers the SQLite network warning. |
-| `bridge.redis.*` | local Redis defaults | Redis connection and channel settings. |
+| `bridge.redis.*` | local Redis defaults | Redis connection and channel settings used only in REDIS mode. |
 | `bridge.database.poll` | `3` | Proxy polling interval in DATABASE mode. |
 | `bridge.backend.guard` | `false` | Bukkit-side direct-backend guard. |
 | `bridge.backend.proxy-ips` | localhost | Allowed proxy addresses when backend guard is enabled. |

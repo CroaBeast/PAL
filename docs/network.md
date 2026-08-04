@@ -7,11 +7,11 @@ PAL supports a Bukkit auth server plus a proxy addon through Redis or a shared d
 - Put `PAL.jar` on the auth/lobby Bukkit server.
 - Put the PAL proxy addon on Velocity or BungeeCord.
 - Use shared remote SQL for accounts on production networks.
-- Use Redis for signed session state and Pub/Sub events when possible.
-- Use `DATABASE` mode when Redis is not available and the proxy can access the same remote SQL database.
+- Use `DATABASE` mode by default when the proxy can access the same remote SQL database.
+- Use `REDIS` mode only when you want real-time signed session state and Pub/Sub events.
 - Block direct access to backend servers with firewall rules or proxy forwarding secrets.
 
-SQLite can work for a small auth-server-only setup, but PAL warns when bridge mode is enabled with several configured servers. For networks with multiple backends, remote SQL plus Redis is the recommended baseline. `DATABASE` mode should use MySQL, MariaDB or PostgreSQL; SQLite is local-file only unless the proxy and auth server intentionally share the same filesystem path.
+SQLite can work for a small auth-server-only setup, but PAL warns when bridge mode is enabled with several configured servers. For networks with multiple backends, shared remote SQL is the recommended baseline. `DATABASE` mode should use MySQL, MariaDB or PostgreSQL; SQLite is local-file only unless the proxy and auth server intentionally share the same filesystem path.
 
 ## Bridge config
 
@@ -20,7 +20,7 @@ On Bukkit, configure `bridge.yml`:
 ```yaml
 bridge:
   enabled: true
-  mode: REDIS # REDIS, DATABASE, MEMORY, DISABLED
+  mode: DATABASE # DATABASE, REDIS, MEMORY, DISABLED
   net:
     auth: auth
     lobby: lobby
@@ -30,7 +30,7 @@ bridge:
     required: true
     premium: true
     bedrock: true
-    proxy-auto-login: false
+    proxy-auto-login: true
   fail:
     enabled: true
     keep: true
@@ -44,7 +44,7 @@ bridge:
     uri: "redis://localhost:6379/0"
 ```
 
-The same `bridge.sec.secret`, Redis URI, prefix and channel must be configured in the proxy addon.
+The same `bridge.sec.secret` must be configured in the proxy addon. In `DATABASE` mode, point the proxy addon at the same remote SQL database and table prefix.
 
 For `DATABASE` mode, Bukkit keeps using `storage.yml`; the proxy addon must configure the same database in its generated `bridge.yml`:
 
@@ -84,11 +84,11 @@ database user to the PAL database, and use a long random shared secret.
 7. In `DATABASE` mode, the proxy sees the signed saved session on its next poll.
 8. Proxy can move the player to the original destination.
 
-`bridge.guard.proxy-auto-login` is intentionally `false` by default. With that
-setting, verified premium and Floodgate players still pass through the auth
-server once so Bukkit PAL creates the persistent account and signed session.
-Enable it only if you intentionally want the proxy to create temporary verified
-sessions before the Bukkit auth server has seen the account.
+`bridge.guard.proxy-auto-login` is `true` by default. Verified premium and
+Floodgate players can skip Bukkit password auth because the proxy creates a
+signed session and stores it in the shared bridge backend. Disable it if your
+network intentionally requires every player to visit the Bukkit auth server
+before any proxy-side auto-login can occur.
 
 ## Auth Server Failure
 

@@ -69,7 +69,7 @@ final class BridgeServiceImpl extends AbstractService implements BridgeService {
             file.saveDefaults();
 
             enabled = bool(file, "bridge.enabled", false);
-            mode = enabled ? Mode.from(string(file, "bridge.mode", "REDIS")) : Mode.DISABLED;
+            mode = enabled ? Mode.from(string(file, "bridge.mode", "DATABASE")) : Mode.DISABLED;
             servers = integer(file, "bridge.net.servers", integer(file, "bridge.network.servers", 1));
             sqliteAdvice = bool(file, "bridge.advice.sqlite", true);
             sqliteCap = integer(file, "bridge.advice.sqlite-cap", 4);
@@ -213,7 +213,7 @@ final class BridgeServiceImpl extends AbstractService implements BridgeService {
 
         warnedSqliteNetwork = true;
         plugin.getLogger().warning("PAL is using SQLite in network mode with " + servers + " configured servers.");
-        plugin.getLogger().warning("SQLite is fine for a limited auth-server setup, but shared SQL + Redis is recommended for " + sqliteCap + "+ servers.");
+        plugin.getLogger().warning("SQLite is fine for a limited auth-server setup, but shared remote SQL is recommended for " + sqliteCap + "+ servers.");
     }
 
     private void warnIfSecretInvalid(@NotNull PALPlugin plugin) {

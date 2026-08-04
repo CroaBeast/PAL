@@ -7,8 +7,8 @@ bridge:
 
   # Bridge transport mode.
   # Values:
-  # - REDIS: recommended for networks; signed sessions plus Pub/Sub events.
   # - DATABASE: shared SQL session lookup; no Redis required, but proxy updates use polling.
+  # - REDIS: real-time signed sessions plus Pub/Sub events.
   # - MEMORY: local Bukkit memory only; useful for tests, not Bukkit <-> proxy sync.
   # - DISABLED: bridge off.
   mode: DATABASE
@@ -39,10 +39,10 @@ bridge:
     # Allows verified Bedrock/Floodgate identities to be considered by the guard.
     # Values: true, false.
     bedrock: true
-    # When false, verified premium/Bedrock players still visit auth once so PAL
-    # can create a persistent account and signed session before backend access.
+    # When true, verified premium/Bedrock players can skip Bukkit password auth
+    # through a signed proxy-created session.
     # Values: true, false.
-    proxy-auto-login: false
+    proxy-auto-login: true
 
   # Session defaults shared with proxy addons.
   session:
