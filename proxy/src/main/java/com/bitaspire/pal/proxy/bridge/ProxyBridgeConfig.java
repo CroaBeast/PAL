@@ -111,6 +111,8 @@ public final class ProxyBridgeConfig {
                 rejoin,
                 newLogin,
                 fallbackServer,
+                hashIp,
+                bindIp,
                 authenticatedAuthTarget,
                 authenticationRequiredMessage,
                 alreadyAuthenticatedMessage,

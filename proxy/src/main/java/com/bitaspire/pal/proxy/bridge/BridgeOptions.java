@@ -24,6 +24,8 @@ public final class BridgeOptions {
     private final boolean rejoin;
     private final boolean newLogin;
     private final String fallbackServer;
+    private final boolean hashIp;
+    private final boolean bindIp;
     @NotNull
     private final AuthenticatedAuthTarget authenticatedAuthTarget;
     @NotNull
@@ -37,6 +39,7 @@ public final class BridgeOptions {
     public static BridgeOptions authServer(@Nullable String authServer) {
         return new BridgeOptions(authServer, null, false, true, true, true,
                 false, 30, true, true, true, true, false, null,
+                true, false,
                 AuthenticatedAuthTarget.REDIRECT,
                 "Authentication required", "Already authenticated",
                 "You are already authenticated. Auth is only needed for login.");
@@ -46,6 +49,7 @@ public final class BridgeOptions {
     public static BridgeOptions strict(@Nullable String authServer) {
         return new BridgeOptions(authServer, null, true, true, true, true,
                 false, 30, true, true, true, true, false, null,
+                true, false,
                 AuthenticatedAuthTarget.REDIRECT,
                 "Authentication required", "Already authenticated",
                 "You are already authenticated. Auth is only needed for login.");
@@ -55,6 +59,7 @@ public final class BridgeOptions {
     public static BridgeOptions disabled() {
         return new BridgeOptions(null, null, false, false, false, false,
                 false, 0, false, false, false, false, false, null,
+                false, false,
                 AuthenticatedAuthTarget.REDIRECT,
                 "Authentication required", "Already authenticated",
                 "You are already authenticated. Auth is only needed for login.");

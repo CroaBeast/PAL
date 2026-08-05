@@ -7,7 +7,15 @@ import com.bitaspire.pal.proxy.identity.IdentityResult;
 import com.bitaspire.pal.proxy.identity.IdentityType;
 import com.bitaspire.pal.proxy.session.AuthSession;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -73,6 +81,7 @@ final class DefaultConnectionGuard implements ConnectionGuard {
     private ConnectionDecision decideFromSession(@NotNull ConnectionRequest request, Optional<AuthSession> session) {
         long now = System.currentTimeMillis();
         if (!session.isPresent() || session.get().isExpired(now)) return null;
+        if (!matchesAddress(request, session.get())) return null;
 
         String target = authenticatedTarget(request);
         if (target != null) return ConnectionDecision.redirect(target, options.getAlreadyAuthenticatedMessage());
@@ -107,7 +116,7 @@ final class DefaultConnectionGuard implements ConnectionGuard {
     private CompletionStage<ConnectionDecision> decide(ConnectionRequest request, IdentityResult identity) {
         if (!options.isAuthRequired()) return completed(ConnectionDecision.allow(identity));
 
-        CompletionStage<AuthSession> proxySession = proxyAutoLoginSession(identity);
+        CompletionStage<AuthSession> proxySession = proxyAutoLoginSession(request, identity);
         if (proxySession != null) return proxySession.thenApply(ConnectionDecision::allow);
 
         if (isAuthServer(request)) return completed(ConnectionDecision.allow(identity));
@@ -123,22 +132,22 @@ final class DefaultConnectionGuard implements ConnectionGuard {
         return completed(ConnectionDecision.allow());
     }
 
-    private CompletionStage<AuthSession> proxyAutoLoginSession(@NotNull IdentityResult identity) {
+    private CompletionStage<AuthSession> proxyAutoLoginSession(@NotNull ConnectionRequest request, @NotNull IdentityResult identity) {
         if (!options.isProxyAutoLogin() || !identity.isAutoLoginEligible()) return null;
 
         if (identity.getType() == IdentityType.JAVA_PREMIUM && options.isPremiumAuto()) {
-            return saveVerifiedSession(identity);
+            return saveVerifiedSession(request, identity);
         }
 
         if (identity.getType() == IdentityType.BEDROCK && options.isBedrockAuto()) {
-            return saveVerifiedSession(identity);
+            return saveVerifiedSession(request, identity);
         }
 
         return null;
     }
 
     @NotNull
-    private CompletionStage<AuthSession> saveVerifiedSession(@NotNull IdentityResult identity) {
+    private CompletionStage<AuthSession> saveVerifiedSession(@NotNull ConnectionRequest request, @NotNull IdentityResult identity) {
         long now = System.currentTimeMillis();
         long expires = options.getSessionMinutes() <= 0 ? 0L : now + options.getSessionMinutes() * 60_000L;
 
@@ -153,10 +162,36 @@ final class DefaultConnectionGuard implements ConnectionGuard {
                 .authenticatedAtMillis(now)
                 .expiresAtMillis(expires)
                 .sourceServer(options.getAuthServer())
-                .addressHash(null)
+                .addressHash(options.isHashIp() ? hashAddress(request.getAddress()) : null)
                 .build();
 
         return bridge.saveSession(session).thenApply(ignored -> session);
+    }
+
+    private boolean matchesAddress(@NotNull ConnectionRequest request, @NotNull AuthSession session) {
+        if (!options.isBindIp()) return true;
+
+        String storedHash = session.getAddressHash();
+        if (storedHash == null) return true;
+
+        String currentHash = hashAddress(request.getAddress());
+        return currentHash == null || storedHash.equals(currentHash);
+    }
+
+    @Nullable
+    private String hashAddress(@Nullable SocketAddress address) {
+        if (!(address instanceof InetSocketAddress)) return null;
+
+        InetAddress inetAddress = ((InetSocketAddress) address).getAddress();
+        if (inetAddress == null) return null;
+
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(inetAddress.getHostAddress().getBytes(StandardCharsets.UTF_8));
+            return Base64.getUrlEncoder().withoutPadding().encodeToString(hash);
+        } catch (NoSuchAlgorithmException exception) {
+            throw new IllegalStateException("SHA-256 is not available", exception);
+        }
     }
 
     @NotNull
