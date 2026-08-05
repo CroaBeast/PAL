@@ -157,6 +157,24 @@ final class StorageServiceImpl extends AbstractService implements StorageService
     }
 
     @NotNull
+    CompletionStage<Void> touchLogin(@NotNull UUID uniqueId, @Nullable InetAddress lastAddress, @NotNull Instant lastLoginAt) {
+        return run(() -> {
+            long now = System.currentTimeMillis();
+
+            try (PreparedStatement statement = connection.prepareStatement(
+                    "UPDATE " + table("accounts") +
+                            " SET last_address = COALESCE(?, last_address), last_login_at = ?, updated_at = ? WHERE unique_id = ?"
+            )) {
+                statement.setString(1, address(lastAddress));
+                statement.setLong(2, lastLoginAt.toEpochMilli());
+                statement.setLong(3, now);
+                statement.setString(4, uniqueId.toString());
+                statement.executeUpdate();
+            }
+        });
+    }
+
+    @NotNull
     CompletionStage<Boolean> deleteAccount(@NotNull UUID uniqueId) {
         return supply(() -> {
             deleteByUniqueId("credentials", uniqueId);

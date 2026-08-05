@@ -106,11 +106,13 @@ final class SessionServiceImpl extends AbstractService implements SessionService
         if (!options.isEnabled()) {
             cache(session);
             return publish(session)
+                    .thenCompose(ignored -> storage().touchLogin(account.getUniqueId(), address, now))
                     .thenRun(() -> plugin().callEvent(new PALSessionCreateEvent(account, session)))
                     .thenApply(ignored -> session);
         }
 
         return save(session)
+                .thenCompose(ignored -> storage().touchLogin(account.getUniqueId(), address, now))
                 .thenRun(() -> plugin().callEvent(new PALSessionCreateEvent(account, session)))
                 .thenApply(ignored -> session);
     }
