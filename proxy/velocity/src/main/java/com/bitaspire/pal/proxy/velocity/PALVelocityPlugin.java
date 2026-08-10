@@ -52,7 +52,7 @@ import java.util.concurrent.TimeUnit;
 @Plugin(
         id = "pal-proxy",
         name = "PAL Proxy",
-        version = "0.1.0",
+        version = "0.1.1",
         authors = {"CroaBeast"},
         dependencies = {
                 @Dependency(id = "fastlogin", optional = true),
