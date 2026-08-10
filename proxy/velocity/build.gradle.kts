@@ -3,6 +3,7 @@ import org.gradle.api.attributes.java.TargetJvmVersion
 
 dependencies {
     implementation(project(":proxy"))
+    implementation("org.bstats:bstats-velocity:3.1.0")
 
     compileOnly("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
     compileOnly("com.github.games647:fastlogin.core:1.12-SNAPSHOT")
@@ -28,6 +29,8 @@ configurations.configureEach {
 tasks.named<ShadowJar>("shadowJar") {
     archiveBaseName.set("PAL-Velocity")
     archiveClassifier.set("")
+
+    relocate("org.bstats", "com.bitaspire.libs.bstats")
 
     exclude(
         "META-INF/maven/**",

@@ -33,6 +33,7 @@ import com.velocitypowered.api.scheduler.ScheduledTask;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bstats.velocity.Metrics;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -66,6 +67,7 @@ public final class PALVelocityPlugin implements PALAddon {
     private final ProxyServer server;
     private final Logger logger;
     private final File dataFolder;
+    private final Metrics.Factory metricsFactory;
     private final Map<UUID, String> pendingTargets = new ConcurrentHashMap<>();
     private final Map<UUID, ProxyRealm> pendingRealms = new ConcurrentHashMap<>();
     private final Map<String, Boolean> serverHealth = new ConcurrentHashMap<>();
@@ -79,10 +81,11 @@ public final class PALVelocityPlugin implements PALAddon {
     private boolean fastLoginHooksRegistered = false;
 
     @Inject
-    public PALVelocityPlugin(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
+    public PALVelocityPlugin(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory, Metrics.Factory metricsFactory) {
         this.server = server;
         this.logger = logger;
         this.dataFolder = dataDirectory.toFile();
+        this.metricsFactory = metricsFactory;
     }
 
     @Subscribe
@@ -91,6 +94,7 @@ public final class PALVelocityPlugin implements PALAddon {
         ProxyStorageDrivers.install(dataFolder, jar -> server.getPluginManager().addToClasspath(this, jar.toPath()));
         reload();
         registerFastLoginHooks();
+        metricsFactory.make(this, 33120);
         logger.info("PAL Proxy initialized on Velocity with {} registered servers.", server.getAllServers().size());
     }
 

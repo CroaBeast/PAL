@@ -2,6 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 dependencies {
     implementation(project(":proxy"))
+    implementation("org.bstats:bstats-bungeecord:3.1.0")
 
     compileOnly("net.md-5:bungeecord-api:1.21-R0.4")
     compileOnly("com.github.games647:fastlogin.core:1.12-SNAPSHOT")
@@ -11,6 +12,8 @@ dependencies {
 tasks.named<ShadowJar>("shadowJar") {
     archiveBaseName.set("PAL-Bungee")
     archiveClassifier.set("")
+
+    relocate("org.bstats", "com.bitaspire.libs.bstats")
 
     exclude(
         "META-INF/maven/**",

@@ -7,6 +7,7 @@ val protocolMojangProject = project(":protocol:mojang")
 val protocolBukkitProject = project(":protocol:bukkit")
 val takionShaded: Configuration by configurations.creating
 val legacyHashers: Configuration by configurations.creating
+val bStats: Configuration by configurations.creating
 
 dependencies {
     implementation(apiProject)
@@ -21,9 +22,11 @@ dependencies {
     compileOnly("com.github.games647:fastlogin.core:1.12-SNAPSHOT")
     compileOnly("com.github.games647:fastlogin.bukkit:1.12-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.2.4-SNAPSHOT")
+    compileOnly("org.bstats:bstats-bukkit:3.1.0")
 
     takionShaded("me.croabeast.takion:shaded:1.5.1:all")
     legacyHashers("org.mindrot:jbcrypt:0.4") { isTransitive = false }
+    bStats("org.bstats:bstats-bukkit:3.1.0")
 }
 
 val apiMainOutput = apiProject.extensions.getByType<SourceSetContainer>()["main"].output
@@ -49,7 +52,7 @@ tasks.named<ShadowJar>("shadowJar") {
     from(protocolMojangMainOutput)
     from(protocolBukkitMainOutput)
 
-    configurations = listOf(takionShaded, legacyHashers)
+    configurations = listOf(takionShaded, legacyHashers, bStats)
 
     relocate("me.croabeast", "com.bitaspire.libs")
     relocate("com.github.stefvanschie.inventoryframework", "com.bitaspire.libs.inventory")

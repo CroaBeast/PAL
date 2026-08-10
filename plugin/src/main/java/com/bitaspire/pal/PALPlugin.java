@@ -9,6 +9,7 @@ import com.bitaspire.pal.session.SessionService;
 import com.bitaspire.pal.storage.StorageService;
 import me.croabeast.scheduler.GlobalScheduler;
 import me.croabeast.takion.TakionLib;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -87,6 +88,8 @@ public final class PALPlugin extends JavaPlugin implements PALApi {
 
         commandManager = new PALCommandManager(this);
         commandManager.register();
+
+        new Metrics(this, 33120);
 
         getLogger().info("PAL initialized on " + platform + " with scaffold services.");
     }

@@ -26,6 +26,7 @@ import net.md_5.bungee.api.event.ServerKickEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.event.EventHandler;
+import org.bstats.bungeecord.Metrics;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,6 +53,7 @@ public final class PALBungeePlugin extends Plugin implements Listener, PALAddon 
         getProxy().registerChannel(ProxyRoleMessageCodec.CHANNEL);
         getProxy().getPluginManager().registerListener(this, this);
         registerFastLoginHooks();
+        new Metrics(this, 33120);
         getLogger().info("PAL Proxy initialized on BungeeCord.");
     }
 
