@@ -18,6 +18,19 @@ Useful commands:
 /pal reload
 ```
 
+## `/offline` Command Missing After Upgrading To 0.1.2
+
+PAL 0.1.2 renamed the command that switches an account to password login. It is now `/offline`, configured under `commands.offline` in `commands.yml`, with its messages under `offline` in `messages.yml`. PAL does not rewrite existing config files, so installs created before 0.1.2 still use the old section names.
+
+PAL keeps reading the old sections and logs a warning at startup that names each old section it found. To finish the upgrade:
+
+1. In `commands.yml`, rename the old command section to `offline`. Set `name: offline`, `permission: pal.command.offline` and `usage: "/offline confirm"`, and remove `offline` from `aliases` if it is listed there.
+2. In `messages.yml`, rename the old message section to `offline`, and update `password-required` so it mentions `/offline confirm`.
+3. Grant `pal.command.offline` in your permission plugin (LuckPerms or similar). Groups that only had the old permission node lose access to the command until the new node is granted.
+4. Run `/pal reload` or restart, and check that the warnings no longer appear.
+
+The old command label is no longer registered. Players must use `/offline confirm`.
+
 ## Players Cannot Move, Chat or Use Commands
 
 This usually means the player is still in pre-auth.
