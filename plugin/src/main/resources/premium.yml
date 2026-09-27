@@ -1,4 +1,4 @@
-# Premium, cracked/offline, and Bedrock identity settings.
+# Premium, password, and Bedrock identity settings.
 premium:
   # Master switch for premium identity handling.
   # Values: true, false.
@@ -6,7 +6,7 @@ premium:
 
   # Account mode policy.
   # Values:
-  # - HYBRID: allow premium, Bedrock, and offline/cracked accounts.
+  # - HYBRID: allow premium, Bedrock, and password accounts.
   # - PREMIUM_ONLY: only verified premium/Bedrock identities should pass.
   # - OFFLINE_ONLY: do not use premium identity auto-login.
   mode: HYBRID
@@ -95,14 +95,14 @@ premium:
     # Stores premium accounts with Mojang UUIDs.
     # Values: true, false.
     use-premium-uuid: true
-    # Blocks cracked users from taking a known premium name.
+    # Blocks password accounts from taking a known premium name.
     # Values: true, false.
     protect-premium-name-from-offline: true
-    # Allows a premium account to switch itself back to offline/cracked mode.
+    # Allows a premium account to switch itself back to password login.
     # Values: true, false.
     allow-switch-to-offline: false
 
-  # Offline/cracked account behavior.
+  # Password account behavior.
   offline-accounts:
     # Enables password-based offline accounts.
     # Values: true, false.

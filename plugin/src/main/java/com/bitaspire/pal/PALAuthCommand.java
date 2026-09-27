@@ -65,8 +65,8 @@ final class PALAuthCommand extends PALCommand {
                 return unregister(player, args);
             case PREMIUM:
                 return premium(player, args);
-            case CRACKED:
-                return cracked(player, args);
+            case OFFLINE:
+                return offline(player, args);
             case TWO_FACTOR:
                 return twoFactor(player, args);
             default:
@@ -182,12 +182,12 @@ final class PALAuthCommand extends PALCommand {
         return true;
     }
 
-    private boolean cracked(@NotNull Player player, @NotNull String[] args) {
+    private boolean offline(@NotNull Player player, @NotNull String[] args) {
         if (!confirmed(args)) return confirmation(player);
 
         authenticated(player, account -> {
             if (account.getType() == PALAccount.Type.OFFLINE) {
-                return completed(CommandResult.message("cracked.already-enabled"));
+                return completed(CommandResult.message("offline.already-enabled"));
             }
 
             int offset = confirmationOffset();
@@ -195,16 +195,16 @@ final class PALAuthCommand extends PALCommand {
 
             return storage().findPasswordHash(account.getUniqueId()).thenCompose(hash -> {
                 if (hash.isPresent()) {
-                    return switchAccount(player, account, create, hash.get(), AuthSource.COMMAND, "cracked.enabled");
+                    return switchAccount(player, account, create, hash.get(), AuthSource.COMMAND, "offline.enabled");
                 }
 
-                if (args.length < offset + 2) return completed(CommandResult.message("cracked.password-required"));
+                if (args.length < offset + 2) return completed(CommandResult.message("offline.password-required"));
 
                 AuthResult validation = ((AuthServiceImpl) plugin.getAuthService()).validateNewPassword(player.getName(), args[offset], args[offset + 1]);
                 if (validation != null) return completed(CommandResult.message(message(validation)));
 
                 PasswordHash nextHash = ((AuthServiceImpl) plugin.getAuthService()).hashPassword(args[offset]);
-                return switchAccount(player, account, create, nextHash, AuthSource.COMMAND, "cracked.enabled");
+                return switchAccount(player, account, create, nextHash, AuthSource.COMMAND, "offline.enabled");
             });
         }).thenAccept(result -> reply(player, result));
 
@@ -382,7 +382,7 @@ final class PALAuthCommand extends PALCommand {
         LOGOUT,
         UNREGISTER,
         PREMIUM,
-        CRACKED,
+        OFFLINE,
         TWO_FACTOR
     }
 

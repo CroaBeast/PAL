@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,8 +32,26 @@ final class PALCommandOptions {
 
     @NotNull
     static PALCommandOptions from(@NotNull String key, @NotNull ConfigurationSection section) {
+        return from(key, section, null);
+    }
+
+    @NotNull
+    static PALCommandOptions from(@NotNull String key, @NotNull ConfigurationSection section, @Nullable String legacyKey) {
         String name = string(section, "name", key);
         String permission = string(section, "permission", "pal.command." + key);
+        String usage = string(section, "usage", "/" + name);
+
+        // Sections written before a command was renamed keep the old label, permission node and
+        // usage string; only values still left at the old defaults are moved to the new key.
+        if (legacyKey != null) {
+            if (name.equalsIgnoreCase(legacyKey)) name = key;
+            if (permission.equalsIgnoreCase("pal.command." + legacyKey)) permission = "pal.command." + key;
+
+            String legacyUsage = "/" + legacyKey;
+            if (usage.equalsIgnoreCase(legacyUsage) || usage.toLowerCase().startsWith(legacyUsage + " "))
+                usage = "/" + key + usage.substring(legacyUsage.length());
+        }
+
         List<String> aliases = new ArrayList<>();
 
         for (String alias : section.getStringList("aliases")) {
@@ -45,7 +64,7 @@ final class PALCommandOptions {
                 name,
                 permission,
                 string(section, "description", "PAL command: " + name),
-                string(section, "usage", "/" + name),
+                usage,
                 string(section, "permission-message", "general.no-permission"),
                 string(section, "default", defaultPermission(key)),
                 Collections.unmodifiableList(aliases),

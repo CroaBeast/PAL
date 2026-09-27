@@ -296,10 +296,10 @@ commands:
     # Values: true, false.
     require-confirmation: true
 
-  # Switches a player account to offline/cracked mode.
-  cracked:
+  # Switches a player account to password login.
+  offline:
     # Bukkit command label to register.
-    name: cracked
+    name: offline
     # Registers this command when true.
     # Values: true, false.
     enabled: true
@@ -307,16 +307,16 @@ commands:
     # Values: true, false.
     override-existing: false
     # Permission required to use the command.
-    permission: pal.command.cracked
+    permission: pal.command.offline
     # Bukkit default permission state.
     # Values: true, false, op, not op.
     default: true
     # Command description shown in help output.
     description: "Switches the current account to offline mode."
     # Alternative command labels.
-    aliases: [ offline ]
+    aliases: []
     # Usage text shown when arguments are invalid.
-    usage: "/cracked confirm"
+    usage: "/offline confirm"
     # Message shown when the sender lacks permission.
     permission-message: "<P> &cYou do not have permission to change offline mode."
     # Requires the literal confirm argument before switching account type.

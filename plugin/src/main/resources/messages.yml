@@ -143,14 +143,14 @@ premium:
   # Placeholders: {reason}.
   verify-required: "<P> &cPAL could not verify premium ownership: &f{reason}&c."
 
-# Offline/cracked account messages.
-cracked:
+# Password account messages.
+offline:
   # Sent after switching to offline mode.
   enabled: "<P> &aYour account now uses offline mode."
   # Sent when the account is already offline.
   already-enabled: "<P> &eYour account is already in offline mode."
   # Sent when switching to offline mode requires creating a password.
-  password-required: "<P> &cThis account has no password yet. Use &f/cracked confirm <password> <password>&c."
+  password-required: "<P> &cThis account has no password yet. Use &f/offline confirm <password> <password>&c."
 
 # Security challenge messages.
 security:

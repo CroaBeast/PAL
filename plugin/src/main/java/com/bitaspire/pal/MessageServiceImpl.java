@@ -12,8 +12,11 @@ import java.util.Map;
 
 final class MessageServiceImpl {
 
+    private static final String LEGACY_OFFLINE_ROOT = "cracked";
+
     private final PALPlugin plugin;
     private YamlConfiguration messages;
+    private boolean legacyWarned = false;
 
     MessageServiceImpl(@NotNull PALPlugin plugin) {
         this.plugin = plugin;
@@ -24,6 +27,7 @@ final class MessageServiceImpl {
         File file = new File(plugin.getDataFolder(), "messages.yml");
         if (!file.exists()) plugin.saveResource("messages.yml", false);
         messages = YamlConfiguration.loadConfiguration(file);
+        legacyWarned = false;
     }
 
     boolean send(@NotNull CommandSender sender, @NotNull String key) {
@@ -59,6 +63,20 @@ final class MessageServiceImpl {
     @NotNull
     private String resolve(@NotNull String key) {
         if (messages != null && messages.isString(key)) return messages.getString(key, key);
+
+        // Section renamed in 0.1.2; outdated messages.yml files still resolve through the old root.
+        if (messages != null && key.startsWith("offline.")) {
+            String legacy = LEGACY_OFFLINE_ROOT + key.substring("offline".length());
+            if (messages.isString(legacy)) {
+                if (!legacyWarned) {
+                    legacyWarned = true;
+                    plugin.getLogger().warning("messages.yml still defines the old '" + LEGACY_OFFLINE_ROOT +
+                            "' section; it is being read as 'offline'. Rename that section to 'offline'.");
+                }
+                return messages.getString(legacy, key);
+            }
+        }
+
         return key.indexOf(' ') < 0 && key.indexOf('&') < 0 && key.indexOf('<') < 0 ? "<P> &cMissing message: &f" + key : key;
     }
 

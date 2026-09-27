@@ -25,7 +25,7 @@ final class PALCommandManager implements Registrable {
             new ReservedDefinition("logout", "session logout", PALAuthCommand.Action.LOGOUT),
             new ReservedDefinition("unregister", "account deletion", PALAuthCommand.Action.UNREGISTER),
             new ReservedDefinition("premium", "premium account switching", PALAuthCommand.Action.PREMIUM),
-            new ReservedDefinition("cracked", "offline account switching", PALAuthCommand.Action.CRACKED),
+            new ReservedDefinition("offline", "offline account switching", PALAuthCommand.Action.OFFLINE, "cracked"),
             new ReservedDefinition("two-factor", "two-factor authentication", PALAuthCommand.Action.TWO_FACTOR)
     );
 
@@ -91,7 +91,7 @@ final class PALCommandManager implements Registrable {
 
     private void registerReserved(ConfigurationSection section) {
         for (ReservedDefinition definition : RESERVED) {
-            PALCommandOptions options = readOptions(section, definition.key);
+            PALCommandOptions options = readOptions(section, definition.key, definition.legacyKey);
             if (options == null) continue;
 
             PALCommand command = definition.action == null
@@ -103,8 +103,21 @@ final class PALCommandManager implements Registrable {
     }
 
     private PALCommandOptions readOptions(ConfigurationSection root, String key) {
+        return readOptions(root, key, null);
+    }
+
+    private PALCommandOptions readOptions(ConfigurationSection root, String key, String legacyKey) {
         ConfigurationSection section = root.getConfigurationSection(key);
         if (section != null) return PALCommandOptions.from(key, section);
+
+        ConfigurationSection legacy = legacyKey == null ? null : root.getConfigurationSection(legacyKey);
+        if (legacy != null) {
+            plugin.getLogger().warning(
+                    "commands.yml still defines the old '" + legacyKey + "' section; it is being read as '" + key +
+                            "'. Rename that section to '" + key + "' and grant 'pal.command." + key +
+                            "' in your permission plugin, since the old node is no longer used.");
+            return PALCommandOptions.from(key, legacy, legacyKey);
+        }
 
         plugin.getLogger().warning("Command '" + key + "' is missing in commands.yml, skipping.");
         return null;
@@ -187,15 +200,21 @@ final class PALCommandManager implements Registrable {
         private final String key;
         private final String feature;
         private final PALAuthCommand.Action action;
+        private final String legacyKey;
 
         private ReservedDefinition(String key, String feature) {
-            this(key, feature, null);
+            this(key, feature, null, null);
         }
 
         private ReservedDefinition(String key, String feature, PALAuthCommand.Action action) {
+            this(key, feature, action, null);
+        }
+
+        private ReservedDefinition(String key, String feature, PALAuthCommand.Action action, String legacyKey) {
             this.key = key;
             this.feature = feature;
             this.action = action;
+            this.legacyKey = legacyKey;
         }
     }
 }
