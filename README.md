@@ -2,9 +2,11 @@
 
 PAL is a Bukkit/Paper/Folia authentication plugin with optional proxy support for Velocity and BungeeCord networks.
 
+PAL is an authentication and account security plugin. It does not provide, promote or endorse pirated copies of Minecraft, and it does not bypass any Mojang or Microsoft ownership verification.
+
 The free edition focuses on the core auth stack:
 
-- Offline account registration and login.
+- Password account registration and password login.
 - Premium account handling through Bukkit online-mode, FastLogin or the PAL proxy addon.
 - Bedrock identity handling through Floodgate.
 - TOTP two-factor authentication with backup codes.
@@ -50,10 +52,10 @@ PAL is currently suitable for closed beta and local staging. A public beta shoul
 
 ### Main Features
 
-- Offline/cracked account registration and password login.
+- Password account registration and password login.
 - Java premium auto-login through verified proxy identity.
 - Bedrock auto-login through Geyser and Floodgate.
-- Hybrid premium/cracked handling for offline-mode networks.
+- Hybrid premium/password account handling for offline-mode networks.
 - Session sync between Bukkit auth and proxy through Redis or shared SQL.
 - Shared SQL storage for accounts, passwords, sessions and audit data.
 - Pre-auth realms for auth, lobby and limbo style behavior.
@@ -70,17 +72,17 @@ PAL is currently suitable for closed beta and local staging. A public beta shoul
 
 - Velocity proxy starts with PAL proxy, Geyser and Floodgate.
 - Purpur auth, lobby and survival backends start with PAL, ViaVersion and ViaBackwards where configured.
-- Offline/cracked players are redirected to auth, can register, can authenticate and can reach protected servers.
+- Players with password accounts are redirected to auth, can register, can authenticate and can reach protected servers.
 - Already-authenticated players are not forced to re-login when moving between lobby/survival.
 - Premium Java players can be verified by the proxy and auto-logged without using `/login`.
 - Proxy-created premium sessions are persisted into SQL before being used by Bukkit.
 - Bukkit PAL can read DATABASE bridge sessions written by the proxy.
-- Name-conflict protection prevents a verified premium session from claiming an existing offline account with the same name but a different UUID.
+- Name-conflict protection prevents a verified premium session from claiming an existing password account with the same name but a different UUID.
 - Backend outage handling can redirect to a configured fallback/auth target instead of leaving the player stuck on a dead backend.
 - `/server auth` behavior is configurable with `bridge.guard.authenticated-auth-target`.
 - Auth/lobby/limbo logical realms can point to the same Bukkit backend and still apply different realm behavior.
 - User-facing auth/proxy messages can be edited in YAML config.
-- Force-logout keeps offline/cracked behavior as manual re-auth, while premium/Bedrock accounts are kicked to reconnect and revalidate.
+- Force-logout keeps password accounts on manual re-auth, while premium/Bedrock accounts are kicked to reconnect and revalidate.
 - Direct connection to a Velocity-forwarded Purpur backend is blocked by the server/proxy forwarding layer.
 
 ### Not Yet Public-Beta Verified

@@ -7,12 +7,12 @@ Commands are registered dynamically through `commands.yml` and CommandFramework.
 | Command | Aliases | Permission | Default | Description |
 | --- | --- | --- | --- | --- |
 | `/login <password>` | `/l` | `pal.command.login` | true | Logs into an existing account. |
-| `/register <password> <password>` | `/reg` | `pal.command.register` | true | Registers an offline account. |
+| `/register <password> <password>` | `/reg` | `pal.command.register` | true | Registers a password account. |
 | `/changepassword <old-password> <new-password>` | `/changepw`, `/cpw` | `pal.command.changepassword` | true | Changes the current account password. |
 | `/logout` | none | `pal.command.logout` | true | Invalidates the current session. |
 | `/unregister confirm` | none | `pal.command.unregister` | true | Deletes the current account registration. |
 | `/premium confirm` | none | `pal.command.premium` | true | Switches the current account to premium mode after verified ownership. |
-| `/cracked confirm` | `/offline` | `pal.command.cracked` | true | Switches the current account to offline mode. |
+| `/offline confirm` | none | `pal.command.offline` | true | Switches the current account to password login. |
 | `/pal2fa <code>` | `/2fa` | `pal.command.2fa` | true | Completes a pending two-factor login. |
 | `/pal2fa setup` | `/2fa setup` | `pal.command.2fa` | true | Starts TOTP setup for the authenticated account. |
 | `/pal2fa confirm <code>` | `/2fa confirm <code>` | `pal.command.2fa` | true | Confirms TOTP setup. |
@@ -44,7 +44,7 @@ These commands are intentionally destructive or identity-changing and require `c
 
 - `/unregister confirm`
 - `/premium confirm`
-- `/cracked confirm`
+- `/offline confirm`
 
 This behavior is controlled by `commands.<command>.require-confirmation`.
 

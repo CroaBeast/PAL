@@ -18,7 +18,7 @@ PAL does not rely on static `plugin.yml` permission children for command registr
 | `pal.command.logout` | true | `/logout` |
 | `pal.command.unregister` | true | `/unregister` |
 | `pal.command.premium` | true | `/premium` |
-| `pal.command.cracked` | true | `/cracked`, `/offline` |
+| `pal.command.offline` | true | `/offline` |
 | `pal.command.2fa` | true | `/pal2fa`, `/2fa` |
 
 ## Admin Permissions

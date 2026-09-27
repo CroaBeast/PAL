@@ -37,7 +37,7 @@ Common keys per command:
 | `aliases` | Command aliases. |
 | `usage` | Usage shown by PAL. |
 | `permission-message` | Message shown when permission is denied. |
-| `require-confirmation` | Used by destructive identity commands such as `/unregister`, `/premium` and `/cracked`. |
+| `require-confirmation` | Used by destructive identity commands such as `/unregister`, `/premium` and `/offline`. |
 
 The admin command uses `commands.pal.subcommands` for `/pal` subcommands.
 
@@ -160,7 +160,7 @@ Use remote SQL for networks. SQLite is intended for single-server installs or is
 
 ## `premium.yml`
 
-Premium/offline/Bedrock identity behavior.
+Premium/password/Bedrock identity behavior.
 
 | Key | Default | Description |
 | --- | --- | --- |
@@ -173,8 +173,8 @@ Premium/offline/Bedrock identity behavior.
 | `premium.pal-resolver.bukkit-online-mode-proof` | `true` | Treats Bukkit online-mode as verified Mojang proof. |
 | `premium.protocol.enabled` | `true` | Enables protocol/login-phase integration when available. |
 | `premium.premium-accounts.auto-login` | `true` | Auto-login verified premium users. |
-| `premium.premium-accounts.upgrade-offline-on-verified-login` | `true` | Converts offline accounts to premium after verified login. |
-| `premium.offline-accounts.enabled` | `true` | Allows offline accounts. |
+| `premium.premium-accounts.upgrade-offline-on-verified-login` | `true` | Converts password accounts to premium after verified login. |
+| `premium.offline-accounts.enabled` | `true` | Allows password accounts. |
 | `premium.bedrock.floodgate.enabled` | `true` | Enables Floodgate Bedrock detection. |
 
 Important: standalone offline-mode Bukkit cannot prove Java premium ownership. Use Bukkit online-mode, FastLogin or the PAL proxy addon for real ownership proof.
