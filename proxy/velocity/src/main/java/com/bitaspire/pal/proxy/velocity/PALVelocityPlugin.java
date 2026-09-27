@@ -94,7 +94,7 @@ public final class PALVelocityPlugin implements PALAddon {
         ProxyStorageDrivers.install(dataFolder, jar -> server.getPluginManager().addToClasspath(this, jar.toPath()));
         reload();
         registerFastLoginHooks();
-        metricsFactory.make(this, 33120);
+        metricsFactory.make(this, 33455);
         logger.info("PAL Proxy initialized on Velocity with {} registered servers.", server.getAllServers().size());
     }
 

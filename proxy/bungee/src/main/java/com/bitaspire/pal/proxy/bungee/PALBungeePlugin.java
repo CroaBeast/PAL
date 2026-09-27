@@ -53,7 +53,7 @@ public final class PALBungeePlugin extends Plugin implements Listener, PALAddon 
         getProxy().registerChannel(ProxyRoleMessageCodec.CHANNEL);
         getProxy().getPluginManager().registerListener(this, this);
         registerFastLoginHooks();
-        new Metrics(this, 33120);
+        new Metrics(this, 33453);
         getLogger().info("PAL Proxy initialized on BungeeCord.");
     }
 
