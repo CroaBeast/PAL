@@ -1,12 +1,14 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
+val spigotVersion: String by project
+
 group = "com.bitaspire.pal.protocol"
 
 dependencies {
     api(project(":protocol"))
     implementation(project(":protocol:mojang"))
 
-    compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:$spigotVersion")
 }
 
 tasks.named<ShadowJar>("shadowJar") {

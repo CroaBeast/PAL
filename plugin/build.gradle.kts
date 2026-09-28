@@ -1,6 +1,13 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.file.DuplicatesStrategy
 
+val bstatsVersion: String by project
+val fastloginVersion: String by project
+val floodgateVersion: String by project
+val jbcryptVersion: String by project
+val spigotVersion: String by project
+val takionVersion: String by project
+
 val apiProject = project(":api")
 val protocolProject = project(":protocol")
 val protocolMojangProject = project(":protocol:mojang")
@@ -13,20 +20,20 @@ dependencies {
     implementation(apiProject)
     implementation(protocolMojangProject)
     implementation(protocolBukkitProject)
-    implementation("org.mindrot:jbcrypt:0.4")
+    implementation("org.mindrot:jbcrypt:$jbcryptVersion")
 
-    compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
-    compileOnly("me.croabeast.takion:shaded:1.5.1:all")
+    compileOnly("org.spigotmc:spigot-api:$spigotVersion")
+    compileOnly("me.croabeast.takion:shaded:$takionVersion:all")
     compileOnly("me.clip:placeholderapi:2.12.2")
     compileOnly("net.luckperms:api:5.4")
-    compileOnly("com.github.games647:fastlogin.core:1.12-SNAPSHOT")
-    compileOnly("com.github.games647:fastlogin.bukkit:1.12-SNAPSHOT")
-    compileOnly("org.geysermc.floodgate:api:2.2.4-SNAPSHOT")
-    compileOnly("org.bstats:bstats-bukkit:3.1.0")
+    compileOnly("com.github.games647:fastlogin.core:$fastloginVersion")
+    compileOnly("com.github.games647:fastlogin.bukkit:$fastloginVersion")
+    compileOnly("org.geysermc.floodgate:api:$floodgateVersion")
+    compileOnly("org.bstats:bstats-bukkit:$bstatsVersion")
 
-    takionShaded("me.croabeast.takion:shaded:1.5.1:all")
-    legacyHashers("org.mindrot:jbcrypt:0.4") { isTransitive = false }
-    bStats("org.bstats:bstats-bukkit:3.1.0")
+    takionShaded("me.croabeast.takion:shaded:$takionVersion:all")
+    legacyHashers("org.mindrot:jbcrypt:$jbcryptVersion") { isTransitive = false }
+    bStats("org.bstats:bstats-bukkit:$bstatsVersion")
 }
 
 val apiMainOutput = apiProject.extensions.getByType<SourceSetContainer>()["main"].output

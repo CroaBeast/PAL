@@ -4,6 +4,9 @@ plugins {
     id("com.gradleup.shadow") version "9.4.1" apply false
 }
 
+val annotationsVersion: String by project
+val lombokVersion: String by project
+
 allprojects {
     group = "com.bitaspire.pal"
     version = "0.1.3"
@@ -57,10 +60,10 @@ subprojects {
     }
 
     dependencies {
-        add("compileOnly", "org.jetbrains:annotations:26.0.2")
-        add("annotationProcessor", "org.jetbrains:annotations:26.0.2")
+        add("compileOnly", "org.jetbrains:annotations:$annotationsVersion")
+        add("annotationProcessor", "org.jetbrains:annotations:$annotationsVersion")
 
-        add("compileOnly", "org.projectlombok:lombok:1.18.44")
-        add("annotationProcessor", "org.projectlombok:lombok:1.18.44")
+        add("compileOnly", "org.projectlombok:lombok:$lombokVersion")
+        add("annotationProcessor", "org.projectlombok:lombok:$lombokVersion")
     }
 }

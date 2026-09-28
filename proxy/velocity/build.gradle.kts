@@ -1,14 +1,18 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.attributes.java.TargetJvmVersion
 
+val bstatsVersion: String by project
+val fastloginVersion: String by project
+val velocityVersion: String by project
+
 dependencies {
     implementation(project(":proxy"))
-    implementation("org.bstats:bstats-velocity:3.1.0")
+    implementation("org.bstats:bstats-velocity:$bstatsVersion")
 
-    compileOnly("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
-    compileOnly("com.github.games647:fastlogin.core:1.12-SNAPSHOT")
-    compileOnly("com.github.games647:fastlogin.velocity:1.12-SNAPSHOT")
-    annotationProcessor("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
+    compileOnly("com.velocitypowered:velocity-api:$velocityVersion")
+    compileOnly("com.github.games647:fastlogin.core:$fastloginVersion")
+    compileOnly("com.github.games647:fastlogin.velocity:$fastloginVersion")
+    annotationProcessor("com.velocitypowered:velocity-api:$velocityVersion")
 }
 
 java {

@@ -1,12 +1,15 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
+val bstatsVersion: String by project
+val fastloginVersion: String by project
+
 dependencies {
     implementation(project(":proxy"))
-    implementation("org.bstats:bstats-bungeecord:3.1.0")
+    implementation("org.bstats:bstats-bungeecord:$bstatsVersion")
 
     compileOnly("net.md-5:bungeecord-api:1.21-R0.4")
-    compileOnly("com.github.games647:fastlogin.core:1.12-SNAPSHOT")
-    compileOnly("com.github.games647:fastlogin.bungee:1.12-SNAPSHOT")
+    compileOnly("com.github.games647:fastlogin.core:$fastloginVersion")
+    compileOnly("com.github.games647:fastlogin.bungee:$fastloginVersion")
 }
 
 tasks.named<ShadowJar>("shadowJar") {
