@@ -3,7 +3,6 @@ package com.bitaspire.pal;
 import me.croabeast.takion.TakionLib;
 import me.croabeast.takion.channel.Channel;
 import me.croabeast.takion.logger.TakionLogger;
-import me.croabeast.takion.message.MessageSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
@@ -45,11 +44,6 @@ final class PALLibrary extends TakionLib {
                 return !plugin.getConfiguration().isShowPrefix();
             }
         });
-
-        super.setLoadedSender(new MessageSender(this) {{
-            setSensitive(false);
-            setErrorPrefix("&c[X]&7 ");
-        }});
     }
 
     @Override
@@ -60,11 +54,6 @@ final class PALLibrary extends TakionLib {
     @Override
     public void setLogger(TakionLogger logger) {
         throw new IllegalStateException("TakionLogger can not be set");
-    }
-
-    @Override
-    public void setLoadedSender(MessageSender loadedSender) {
-        throw new IllegalStateException("MessageSender can not be set");
     }
 
     @NotNull
