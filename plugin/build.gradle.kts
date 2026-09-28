@@ -71,6 +71,7 @@ tasks.named<ShadowJar>("shadowJar") {
         "org/apache/commons/**",
         "org/intellij/**",
         "org/jetbrains/**",
+        "kotlin/**",
         "INFO_BIN",
         "INFO_SRC",
         "LICENSE*",
