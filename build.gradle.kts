@@ -9,7 +9,7 @@ val lombokVersion: String by project
 
 allprojects {
     group = "com.bitaspire.pal"
-    version = "0.1.3"
+    version = "0.1.4"
 
     repositories {
         mavenCentral()
