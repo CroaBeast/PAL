@@ -133,8 +133,7 @@ PAL Free never treats a Mojang name lookup as ownership proof. Premium auto-logi
 - Bukkit `online-mode=true`.
 - FastLogin verified the player.
 - The PAL proxy addon handled the login phase and published a verified session.
-
-Standalone offline-mode Bukkit can protect premium names, but it cannot prove ownership by itself.
+- PAL Native login on an offline-mode server asked the player for encryption and Mojang confirmed the session.
 
 ## Build
 

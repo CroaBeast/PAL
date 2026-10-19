@@ -177,7 +177,7 @@ Premium/password/Bedrock identity behavior.
 | `premium.offline-accounts.enabled` | `true` | Allows password accounts. |
 | `premium.bedrock.floodgate.enabled` | `true` | Enables Floodgate Bedrock detection. |
 
-Important: standalone offline-mode Bukkit cannot prove Java premium ownership. Use Bukkit online-mode, FastLogin or the PAL proxy addon for real ownership proof.
+Important: a Mojang name lookup never proves Java premium ownership. Proof comes from PAL Native login, Bukkit online-mode, FastLogin or the PAL proxy addon.
 
 ## `bridge.yml`
 

@@ -64,13 +64,13 @@ Valid proof sources:
 - Bukkit `online-mode=true`.
 - FastLogin verified the player.
 - PAL proxy addon verified the login phase and published a verified bridge session.
+- PAL Native login asked the player for encryption and Mojang confirmed the session.
 
 Not valid proof:
 
 - Mojang name lookup alone.
-- Standalone offline-mode Bukkit without FastLogin or proxy login proof.
 
-If the server is standalone offline-mode, PAL can protect premium names but should still require password login.
+On a standalone offline-mode server, `/premium` answers "reconnect within 5 minutes so Mojang can verify it". The next login is verified by Mojang and switches the account. If it says ownership was not verified instead, check the startup log for `PAL Native login`: it says why the hook is off.
 
 ## FastLogin Is Installed, But PAL Does Not Use It
 

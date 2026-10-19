@@ -11,19 +11,18 @@ Real premium auto-login requires one of:
 - Bukkit `online-mode=true`.
 - FastLogin verified the player.
 - PAL proxy addon verified the login phase and published a trusted session.
-
-Standalone offline-mode Bukkit cannot prove Java premium ownership by itself. In that environment, PAL Native can protect premium names and detect that a Mojang profile exists, but the player should still authenticate with a password unless FastLogin or proxy proof is present.
+- PAL Native login on an offline-mode server verified the login with Mojang.
 
 ## Native Bukkit Protocol
 
-The `protocol` module exists as the future home for login-phase adapters, but Bukkit alone does not expose every login handshake detail needed for secure ownership verification on offline-mode servers.
+On an offline-mode Spigot, Paper or Folia server with no proxy in front, PAL asks two kinds of login for encryption, the way online-mode does: names whose account is premium, and a name that just ran `/premium`. The player is let in only if Mojang confirms the session. Any other name gets the normal offline login.
 
-Free currently takes the secure path:
+It stays off when:
 
-- Do not auto-login from name lookup alone.
-- Prefer FastLogin when installed.
-- Prefer proxy login-phase verification for networks.
-- Treat Bukkit online-mode as verified Mojang proof.
+- the server is in online-mode, or behind BungeeCord or Velocity forwarding (the proxy owns the login there);
+- FastLogin is installed and `premium.protocol.mode` is `AUTO` (set `PAL_NATIVE` to use PAL instead).
+
+If Mojang cannot be reached, the player gets in unverified and logs in with a password.
 
 ## Redis vs Database Bridge
 
