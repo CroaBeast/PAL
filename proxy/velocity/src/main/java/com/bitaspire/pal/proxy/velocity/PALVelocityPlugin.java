@@ -229,10 +229,7 @@ public final class PALVelocityPlugin implements PALAddon {
 
         String kickedFrom = event.getServer().getServerInfo().getName();
         Optional<RegisteredServer> target = kickTarget(event.getPlayer(), kickedFrom);
-        if (!target.isPresent()) {
-            event.setResult(KickedFromServerEvent.DisconnectPlayer.create(message(authServerUnavailableMessage())));
-            return;
-        }
+        if (!target.isPresent()) return;
 
         event.setResult(KickedFromServerEvent.RedirectPlayer.create(
                 target.get(),
