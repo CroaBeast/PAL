@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
-import java.net.URL;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.util.Optional;
 import java.util.UUID;
@@ -104,7 +104,7 @@ public final class MojangProfileClient {
 
     @NotNull
     private static HttpURLConnection open(@NotNull String url, int timeoutMillis) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        HttpURLConnection connection = (HttpURLConnection) URI.create(url).toURL().openConnection();
         connection.setRequestMethod("GET");
         connection.setConnectTimeout(timeoutMillis);
         connection.setReadTimeout(timeoutMillis);
