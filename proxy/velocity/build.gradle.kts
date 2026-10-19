@@ -1,9 +1,9 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.attributes.java.TargetJvmVersion
 
-val bstatsVersion: String by project
-val fastloginVersion: String by project
-val velocityVersion: String by project
+val bstatsVersion = property("bstatsVersion") as String
+val fastloginVersion = property("fastloginVersion") as String
+val velocityVersion = property("velocityVersion") as String
 
 dependencies {
     implementation(project(":proxy"))

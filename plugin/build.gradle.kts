@@ -1,25 +1,25 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.file.DuplicatesStrategy
 
-val bstatsVersion: String by project
-val fastloginVersion: String by project
-val floodgateVersion: String by project
-val jbcryptVersion: String by project
-val spigotVersion: String by project
-val takionVersion: String by project
+val bstatsVersion = property("bstatsVersion") as String
+val fastloginVersion = property("fastloginVersion") as String
+val floodgateVersion = property("floodgateVersion") as String
+val jbcryptVersion = property("jbcryptVersion") as String
+val spigotVersion = property("spigotVersion") as String
+val takionVersion = property("takionVersion") as String
 
 val apiProject = project(":api")
 val protocolProject = project(":protocol")
 val protocolMojangProject = project(":protocol:mojang")
 val protocolBukkitProject = project(":protocol:bukkit")
-val takionShaded: Configuration by configurations.creating
-val legacyHashers: Configuration by configurations.creating
-val bStats: Configuration by configurations.creating
+val takionShaded = configurations.create("takionShaded")
+val legacyHashers = configurations.create("legacyHashers")
+val bStats = configurations.create("bStats")
 
 dependencies {
-    implementation(apiProject)
-    implementation(protocolMojangProject)
-    implementation(protocolBukkitProject)
+    implementation(project(":api"))
+    implementation(project(":protocol:mojang"))
+    implementation(project(":protocol:bukkit"))
     implementation("org.mindrot:jbcrypt:$jbcryptVersion")
 
     compileOnly("org.spigotmc:spigot-api:$spigotVersion")

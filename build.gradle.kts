@@ -4,8 +4,8 @@ plugins {
     id("com.gradleup.shadow") version "9.4.1" apply false
 }
 
-val annotationsVersion: String by project
-val lombokVersion: String by project
+val annotationsVersion = property("annotationsVersion") as String
+val lombokVersion = property("lombokVersion") as String
 
 allprojects {
     group = "com.bitaspire.pal"

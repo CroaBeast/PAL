@@ -1,6 +1,6 @@
-val annotationsVersion: String by project
-val spigotVersion: String by project
-val takionVersion: String by project
+val annotationsVersion = property("annotationsVersion") as String
+val spigotVersion = property("spigotVersion") as String
+val takionVersion = property("takionVersion") as String
 
 dependencies {
     api("org.jetbrains:annotations:$annotationsVersion")

@@ -1,6 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-val spigotVersion: String by project
+val spigotVersion = property("spigotVersion") as String
 
 group = "com.bitaspire.pal.protocol"
 

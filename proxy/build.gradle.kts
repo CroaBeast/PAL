@@ -1,5 +1,5 @@
-val fastloginVersion: String by project
-val floodgateVersion: String by project
+val fastloginVersion = property("fastloginVersion") as String
+val floodgateVersion = property("floodgateVersion") as String
 
 dependencies {
     api(project(":protocol:proxy"))
