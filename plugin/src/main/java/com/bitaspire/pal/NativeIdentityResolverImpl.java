@@ -8,6 +8,7 @@ import com.bitaspire.pal.identity.IdentityResult;
 import com.bitaspire.pal.identity.IdentityTrust;
 import com.bitaspire.pal.identity.IdentityType;
 import com.bitaspire.pal.bridge.BridgeSession;
+import com.bitaspire.pal.protocol.ProtocolIdentity;
 import com.bitaspire.pal.protocol.mojang.MojangProfile;
 import com.bitaspire.pal.protocol.mojang.MojangProfileClient;
 import lombok.AccessLevel;
@@ -46,6 +47,16 @@ final class NativeIdentityResolverImpl implements IdentityResolver {
                     getProvider(),
                     request.getName(),
                     "PAL native resolver is disabled"
+            ));
+        }
+
+        ProtocolIdentity proof = ((PALPlugin) api.getPlugin()).getProtocolService().consumeVerified(request.getName());
+        if (proof != null) {
+            return CompletableFuture.completedFuture(IdentityResult.verifiedPremium(
+                    getProvider(),
+                    proof.getUniqueId(),
+                    proof.getName(),
+                    IdentityTrust.VERIFIED_SESSION
             ));
         }
 

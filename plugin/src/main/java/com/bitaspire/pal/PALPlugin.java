@@ -7,6 +7,8 @@ import com.bitaspire.pal.integration.IntegrationManager;
 import com.bitaspire.pal.premium.PremiumService;
 import com.bitaspire.pal.session.SessionService;
 import com.bitaspire.pal.storage.StorageService;
+import lombok.AccessLevel;
+import lombok.Getter;
 import me.croabeast.scheduler.GlobalScheduler;
 import me.croabeast.takion.TakionLib;
 import org.bstats.bukkit.Metrics;
@@ -34,6 +36,7 @@ public final class PALPlugin extends JavaPlugin implements PALApi {
     private StorageServiceImpl storageService;
     private PremiumServiceImpl premiumService;
     private BridgeServiceImpl bridgeService;
+    @Getter(AccessLevel.PACKAGE)
     private ProtocolServiceImpl protocolService;
     private MigrationServiceImpl migrationService;
 

@@ -1,12 +1,16 @@
 package com.bitaspire.pal;
 
+import com.bitaspire.pal.account.PALAccount;
+import com.bitaspire.pal.protocol.ProtocolIdentity;
 import com.bitaspire.pal.protocol.bukkit.BukkitAdapter;
 import com.bitaspire.pal.protocol.bukkit.BukkitAdapters;
 import com.bitaspire.pal.protocol.bukkit.BukkitOptions;
 import me.croabeast.file.ConfigurableFile;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.concurrent.CompletionStage;
 
 final class ProtocolServiceImpl extends AbstractService {
 
@@ -27,9 +31,28 @@ final class ProtocolServiceImpl extends AbstractService {
     void reload() {
         if (adapter != null) adapter.stop();
         options = load(plugin());
-        adapter = BukkitAdapters.create(plugin(), options);
+        adapter = BukkitAdapters.create(plugin(), options, this::isPremiumAccount);
         adapter.start();
         warnIfUnsupported();
+    }
+
+    boolean isChallenging() {
+        return adapter != null && adapter.isChallenging();
+    }
+
+    void challenge(@NotNull String name) {
+        if (adapter != null) adapter.challenge(name);
+    }
+
+    @Nullable
+    ProtocolIdentity consumeVerified(@NotNull String name) {
+        return adapter == null ? null : adapter.consumeVerified(name);
+    }
+
+    @NotNull
+    private CompletionStage<Boolean> isPremiumAccount(@NotNull String name) {
+        return api.getAccountService().findByName(name)
+                .thenApply(account -> account.isPresent() && account.get().getType() == PALAccount.Type.PREMIUM);
     }
 
     @Override

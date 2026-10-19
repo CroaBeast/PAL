@@ -163,6 +163,15 @@ final class PALAuthCommand extends PALCommand {
 
             return plugin.getPremiumService().resolveIdentity(request).thenCompose(identity -> {
                 if (!isVerifiedPremium(identity)) {
+                    // The next login of this name gets the encryption handshake, and a verified
+                    // one upgrades the account through the auto-login path.
+                    if (identity.isPremiumNameExists() && plugin.getProtocolService().isChallenging()) {
+                        plugin.getProtocolService().challenge(player.getName());
+                        return completed(CommandResult.message("premium.verify-required", placeholders(
+                                "reason", "reconnect within 5 minutes so Mojang can verify it"
+                        )));
+                    }
+
                     return completed(CommandResult.message("premium.verify-required", placeholders(
                             "reason", identity.getReason() == null ? "ownership was not verified" : identity.getReason()
                     )));
