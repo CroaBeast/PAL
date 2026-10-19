@@ -45,6 +45,12 @@ subprojects {
         options.compilerArgs.add("-Xlint:-options")
     }
 
+    // Lombok's delombok calls sun.misc.Unsafe, which JDK 24+ warns about on every run.
+    val javaToolchains = extensions.getByType<JavaToolchainService>()
+    tasks.withType<io.freefair.gradle.plugins.lombok.tasks.Delombok>().configureEach {
+        launcher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(17)) })
+    }
+
     tasks.withType<Javadoc>().configureEach {
         isFailOnError = false
 
