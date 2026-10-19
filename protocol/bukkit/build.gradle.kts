@@ -1,6 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 val spigotVersion = property("spigotVersion") as String
+val nettyVersion = property("nettyVersion") as String
 
 group = "com.bitaspire.pal.protocol"
 
@@ -9,6 +10,7 @@ dependencies {
     implementation(project(":protocol:mojang"))
 
     compileOnly("org.spigotmc:spigot-api:$spigotVersion")
+    compileOnly("io.netty:netty-codec:$nettyVersion")
 }
 
 tasks.named<ShadowJar>("shadowJar") {
