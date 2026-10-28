@@ -71,8 +71,8 @@ premium:
     enabled: true
     # Protocol mode.
     # Values:
-    # - AUTO: on an offline-mode server with no proxy and no FastLogin, PAL asks premium
-    #   accounts for encryption at login and verifies them with Mojang itself.
+    # - AUTO: on an offline-mode server with no proxy and no FastLogin, PAL detects premium
+    #   names, including first-time joins, and verifies their sessions with Mojang at login.
     # - PAL_NATIVE: same as AUTO, but runs even when FastLogin is installed.
     # - DISABLED: disable protocol-assisted checks.
     mode: AUTO

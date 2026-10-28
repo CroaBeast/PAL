@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,6 +53,8 @@ final class BukkitNativeAdapter implements BukkitAdapter {
     private final BukkitOptions options;
     @NotNull
     private final Function<String, CompletionStage<Boolean>> premiumName;
+    @NotNull
+    private final Function<String, CompletionStage<Boolean>> premiumNameLookup;
 
     @Getter(AccessLevel.PACKAGE)
     private final MojangProfileClient client = new MojangProfileClient();
@@ -62,6 +65,15 @@ final class BukkitNativeAdapter implements BukkitAdapter {
     private KeyPair keyPair;
     private Acceptor acceptor;
     private final List<Channel> serverChannels = new ArrayList<>();
+
+    BukkitNativeAdapter(@NotNull Plugin plugin, @NotNull BukkitOptions options,
+                        @NotNull Function<String, CompletionStage<Boolean>> premiumName) {
+        this.plugin = plugin;
+        this.options = options;
+        this.premiumName = premiumName;
+        this.premiumNameLookup = name -> client.findByName(name, options.getTimeoutMillis())
+                .thenApply(Optional::isPresent);
+    }
 
     @NotNull
     @Override
@@ -140,7 +152,9 @@ final class BukkitNativeAdapter implements BukkitAdapter {
         Long at = challenges.remove(key(name));
         if (at != null && !isExpired(at)) return CompletableFuture.completedFuture(true);
 
-        return premiumName.apply(name);
+        return premiumName.apply(name).thenCompose(premium -> Boolean.TRUE.equals(premium)
+                ? CompletableFuture.completedFuture(true)
+                : premiumNameLookup.apply(name));
     }
 
     void verified(@NotNull String name, @NotNull MojangProfile profile) {
