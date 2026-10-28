@@ -9,7 +9,7 @@ val lombokVersion = property("lombokVersion") as String
 
 allprojects {
     group = "com.bitaspire.pal"
-    version = "0.1.4"
+    version = "0.1.5"
 
     repositories {
         mavenCentral()
