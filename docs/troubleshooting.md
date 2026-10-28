@@ -70,7 +70,7 @@ Not valid proof:
 
 - Mojang name lookup alone.
 
-On a standalone offline-mode server, `/premium` answers "reconnect within 5 minutes so Mojang can verify it". The next login is verified by Mojang and switches the account. If it says ownership was not verified instead, check the startup log for `PAL Native login`: it says why the hook is off.
+On a standalone offline-mode server with `premium.protocol.enabled: true`, PAL Native detects premium names and verifies their sessions during the first connection. If `/premium confirm` answers "reconnect within 5 minutes so Mojang can verify it", the current connection was not verified; reconnect within that time to request a new handshake. If it says ownership was not verified instead, check the startup log for `PAL Native login`: it says why the hook is off.
 
 ## FastLogin Is Installed, But PAL Does Not Use It
 

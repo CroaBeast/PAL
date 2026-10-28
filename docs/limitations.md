@@ -15,7 +15,7 @@ Real premium auto-login requires one of:
 
 ## Native Bukkit Protocol
 
-On an offline-mode Spigot, Paper or Folia server with no proxy in front, PAL asks two kinds of login for encryption, the way online-mode does: names whose account is premium, and a name that just ran `/premium`. The player is let in only if Mojang confirms the session. Any other name gets the normal offline login.
+On an offline-mode Spigot, Paper or Folia server with no proxy in front, PAL looks up new names before login and requests encryption when a Mojang profile exists, including on the first connection. Stored premium accounts and names that just ran `/premium` are also challenged. Only a session confirmed by Mojang grants premium auto-login; the name lookup alone never does. Names without a Mojang profile get the normal offline login. An offline client using a premium name cannot complete the premium handshake and must use a different name.
 
 It stays off when:
 

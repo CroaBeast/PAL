@@ -28,7 +28,7 @@ PAL can auto-login premium players on Bukkit when the connection has already bee
 - Bukkit `online-mode=true`, or
 - a proxy/login protocol layer proves ownership and passes the verified decision to PAL.
 
-On offline-mode standalone Bukkit, a name lookup is not enough to prove ownership. PAL Native login proves it itself: premium accounts are asked for encryption at login and verified with Mojang. A player with a password account runs `/premium`, reconnects within 5 minutes, and the verified login switches the account.
+On offline-mode standalone Bukkit, enable `premium.protocol.enabled` to use PAL Native login. It detects premium names on the first connection, requests encryption and verifies the session with Mojang before registering or logging in the player. A name lookup alone never proves ownership. Stored premium accounts are verified on each connection. `/premium confirm` remains available to request verification on the next connection within 5 minutes.
 
 ## Integrations
 
