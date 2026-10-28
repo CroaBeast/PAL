@@ -1,6 +1,7 @@
 package com.bitaspire.pal;
 
 import com.bitaspire.pal.account.PALAccount;
+import com.bitaspire.pal.identity.IdentityMode;
 import com.bitaspire.pal.protocol.ProtocolIdentity;
 import com.bitaspire.pal.protocol.bukkit.BukkitAdapter;
 import com.bitaspire.pal.protocol.bukkit.BukkitAdapters;
@@ -81,7 +82,10 @@ final class ProtocolServiceImpl extends AbstractService {
             file.saveDefaults();
 
             return BukkitOptions.builder()
-                    .enabled(bool(file, "premium.protocol.enabled", true))
+                    .enabled(bool(file, "premium.protocol.enabled", true)
+                            && bool(file, "premium.enabled", true)
+                            && bool(file, "premium.pal-resolver.enabled", true)
+                            && IdentityMode.from(string(file, "premium.mode", "HYBRID")) != IdentityMode.OFFLINE_ONLY)
                     .requireLoginPhase(bool(file, "premium.protocol.phase-required", true))
                     .timeoutMillis(integer(file, "premium.protocol.timeout-ms", 5000))
                     .mode(mode(string(file, "premium.protocol.mode", "AUTO")))
