@@ -32,7 +32,7 @@ final class ProtocolServiceImpl extends AbstractService {
     void reload() {
         if (adapter != null) adapter.stop();
         options = load(plugin());
-        adapter = BukkitAdapters.create(plugin(), options, this::isPremiumAccount);
+        adapter = BukkitAdapters.create(plugin(), options, this::storedAccount);
         adapter.start();
         warnIfUnsupported();
     }
@@ -51,9 +51,13 @@ final class ProtocolServiceImpl extends AbstractService {
     }
 
     @NotNull
-    private CompletionStage<Boolean> isPremiumAccount(@NotNull String name) {
-        return api.getAccountService().findByName(name)
-                .thenApply(account -> account.isPresent() && account.get().getType() == PALAccount.Type.PREMIUM);
+    private CompletionStage<BukkitAdapter.StoredAccount> storedAccount(@NotNull String name) {
+        return api.getAccountService().findByName(name).thenApply(account -> {
+            if (!account.isPresent()) return BukkitAdapter.StoredAccount.NONE;
+            return account.get().getType() == PALAccount.Type.PREMIUM
+                    ? BukkitAdapter.StoredAccount.PREMIUM
+                    : BukkitAdapter.StoredAccount.OFFLINE;
+        });
     }
 
     @Override
@@ -88,6 +92,9 @@ final class ProtocolServiceImpl extends AbstractService {
                             && IdentityMode.from(string(file, "premium.mode", "HYBRID")) != IdentityMode.OFFLINE_ONLY)
                     .requireLoginPhase(bool(file, "premium.protocol.phase-required", true))
                     .timeoutMillis(integer(file, "premium.protocol.timeout-ms", 5000))
+                    .premiumNameLookup(bool(file, "premium.premium-accounts.protect-premium-name-from-offline", true)
+                            && !"ALLOW".equalsIgnoreCase(string(file, "premium.offline-accounts.block-if-premium-name-exists", "ASK")))
+                    .crackedRetry("ASK".equalsIgnoreCase(string(file, "premium.offline-accounts.block-if-premium-name-exists", "ASK")))
                     .mode(mode(string(file, "premium.protocol.mode", "AUTO")))
                     .build();
         } catch (IOException exception) {

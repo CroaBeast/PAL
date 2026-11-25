@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.net.InetAddress;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -52,7 +54,7 @@ final class BukkitNativeAdapter implements BukkitAdapter {
     @NotNull
     private final BukkitOptions options;
     @NotNull
-    private final Function<String, CompletionStage<Boolean>> premiumName;
+    private final Function<String, CompletionStage<StoredAccount>> storedAccount;
     @NotNull
     private final Function<String, CompletionStage<Boolean>> premiumNameLookup;
 
@@ -60,6 +62,7 @@ final class BukkitNativeAdapter implements BukkitAdapter {
     private final MojangProfileClient client = new MojangProfileClient();
     private final Map<String, Long> challenges = new ConcurrentHashMap<>();
     private final Map<String, Verified> verified = new ConcurrentHashMap<>();
+    private final Map<String, Attempt> attempts = new ConcurrentHashMap<>();
 
     @Getter(AccessLevel.PACKAGE)
     private KeyPair keyPair;
@@ -67,10 +70,10 @@ final class BukkitNativeAdapter implements BukkitAdapter {
     private final List<Channel> serverChannels = new ArrayList<>();
 
     BukkitNativeAdapter(@NotNull Plugin plugin, @NotNull BukkitOptions options,
-                        @NotNull Function<String, CompletionStage<Boolean>> premiumName) {
+                        @NotNull Function<String, CompletionStage<StoredAccount>> storedAccount) {
         this.plugin = plugin;
         this.options = options;
-        this.premiumName = premiumName;
+        this.storedAccount = storedAccount;
         this.premiumNameLookup = name -> client.findByName(name, options.getTimeoutMillis())
                 .thenApply(Optional::isPresent);
     }
@@ -147,18 +150,41 @@ final class BukkitNativeAdapter implements BukkitAdapter {
         return entry == null || isExpired(entry.at) ? null : entry.identity;
     }
 
+    /**
+     * Premium accounts always, password accounts never (they upgrade through /premium, which
+     * calls {@link #challenge}), and new names only when they exist on Mojang and premium
+     * names are protected. With ASK, a new name whose challenge failed gets in without one on
+     * its next try from the same address, so a non-premium client is not locked out.
+     */
     @NotNull
-    CompletionStage<Boolean> shouldChallenge(@NotNull String name) {
+    CompletionStage<Boolean> shouldChallenge(@NotNull String name, @Nullable InetAddress address) {
         Long at = challenges.remove(key(name));
         if (at != null && !isExpired(at)) return CompletableFuture.completedFuture(true);
 
-        return premiumName.apply(name).thenCompose(premium -> Boolean.TRUE.equals(premium)
-                ? CompletableFuture.completedFuture(true)
-                : premiumNameLookup.apply(name));
+        return storedAccount.apply(name).thenCompose(account -> {
+            if (account == StoredAccount.PREMIUM) return CompletableFuture.completedFuture(true);
+            if (account == StoredAccount.OFFLINE || !options.isPremiumNameLookup())
+                return CompletableFuture.completedFuture(false);
+            if (options.isCrackedRetry() && retried(name, address))
+                return CompletableFuture.completedFuture(false);
+
+            return premiumNameLookup.apply(name);
+        });
+    }
+
+    void challenged(@NotNull String name, @Nullable InetAddress address) {
+        prune();
+        attempts.put(key(name), new Attempt(System.currentTimeMillis(), address));
+    }
+
+    private boolean retried(@NotNull String name, @Nullable InetAddress address) {
+        Attempt attempt = attempts.remove(key(name));
+        return attempt != null && !isExpired(attempt.at) && Objects.equals(attempt.address, address);
     }
 
     void verified(@NotNull String name, @NotNull MojangProfile profile) {
         prune();
+        attempts.remove(key(name));
         verified.put(key(name), new Verified(System.currentTimeMillis(), ProtocolIdentity.builder()
                 .uniqueId(profile.getUniqueId())
                 .name(profile.getName())
@@ -246,6 +272,7 @@ final class BukkitNativeAdapter implements BukkitAdapter {
     private void prune() {
         verified.values().removeIf(entry -> isExpired(entry.at));
         challenges.values().removeIf(BukkitNativeAdapter::isExpired);
+        attempts.values().removeIf(entry -> isExpired(entry.at));
     }
 
     private static boolean isExpired(long at) {
@@ -284,5 +311,13 @@ final class BukkitNativeAdapter implements BukkitAdapter {
 
         private final long at;
         private final ProtocolIdentity identity;
+    }
+
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    private static final class Attempt {
+
+        private final long at;
+        @Nullable
+        private final InetAddress address;
     }
 }

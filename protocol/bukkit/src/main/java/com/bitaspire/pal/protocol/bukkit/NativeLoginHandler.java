@@ -16,6 +16,8 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.util.Arrays;
@@ -65,7 +67,11 @@ final class NativeLoginHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
 
-            adapter.shouldChallenge(name).whenComplete((challenged, error) -> ctx.channel().eventLoop().execute(() -> {
+            InetAddress address = ctx.channel().remoteAddress() instanceof InetSocketAddress
+                    ? ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress()
+                    : null;
+
+            adapter.shouldChallenge(name, address).whenComplete((challenged, error) -> ctx.channel().eventLoop().execute(() -> {
                 if (error != null || !Boolean.TRUE.equals(challenged)) {
                     release(ctx);
                     return;
@@ -74,6 +80,7 @@ final class NativeLoginHandler extends ChannelInboundHandlerAdapter {
                 challenge = new byte[4];
                 RANDOM.nextBytes(challenge);
                 try {
+                    adapter.challenged(name, address);
                     ctx.channel().writeAndFlush(packets.request(adapter.getKeyPair().getPublic(), challenge));
                 } catch (ReflectiveOperationException exception) {
                     adapter.getPlugin().getLogger().warning("PAL Native login could not send the encryption request: " + exception);

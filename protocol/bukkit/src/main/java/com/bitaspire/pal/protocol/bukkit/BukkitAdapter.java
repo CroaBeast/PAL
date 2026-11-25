@@ -36,4 +36,10 @@ public interface BukkitAdapter extends LoginProtocolAdapter {
     default ProtocolIdentity consumeVerified(@NotNull String name) {
         return null;
     }
+
+    enum StoredAccount {
+        PREMIUM,
+        OFFLINE,
+        NONE
+    }
 }

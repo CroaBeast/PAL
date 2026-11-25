@@ -12,19 +12,19 @@ public final class BukkitAdapters {
     }
 
     /**
-     * @param premiumName answers whether a login of that name must be challenged, usually
-     *                    because its account is stored as premium. Called off the main thread.
+     * @param storedAccount answers what PAL stores under that name; premium accounts are always
+     *                    challenged, password accounts never are. Called off the main thread.
      */
     @NotNull
     public static BukkitAdapter create(
             @NotNull Plugin plugin,
             @NotNull BukkitOptions options,
-            @NotNull Function<String, CompletionStage<Boolean>> premiumName
+            @NotNull Function<String, CompletionStage<BukkitAdapter.StoredAccount>> storedAccount
     ) {
         if (!options.isEnabled() || options.getMode() == BukkitOptions.Mode.DISABLED) {
             return new DisabledBukkitAdapter(plugin, options);
         }
 
-        return new BukkitNativeAdapter(plugin, options, premiumName);
+        return new BukkitNativeAdapter(plugin, options, storedAccount);
     }
 }
