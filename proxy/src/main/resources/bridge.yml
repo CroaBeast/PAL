@@ -51,6 +51,10 @@ bridge:
     timeout-ms: 5000
     # If true, failed native verification blocks login instead of falling back to offline mode.
     block-error: true
+    # If true, a name forced into Mojang verification that fails and reconnects from the same IP
+    # within 5 minutes joins in offline mode, so non-premium players can use names that exist on Mojang.
+    # Leave false when every premium name must stay reserved for its owner.
+    cracked-retry: false
 
   # Proxy-only messages.
   messages:

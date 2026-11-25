@@ -40,6 +40,7 @@ public final class ProxyBridgeConfig {
     private final boolean nativePremium;
     private final int nativeTimeoutMillis;
     private final boolean nativeBlockOnError;
+    private final boolean nativeCrackedRetry;
     @NotNull
     private final String authenticationRequiredMessage;
     @NotNull
@@ -160,6 +161,7 @@ public final class ProxyBridgeConfig {
                 bool(values, "bridge.native.enabled", true),
                 integer(values, "bridge.native.timeout-ms", 5000),
                 bool(values, "bridge.native.block-error", true),
+                bool(values, "bridge.native.cracked-retry", false),
                 string(values, "bridge.messages.authentication-required", "Authentication required"),
                 string(values, "bridge.messages.already-authenticated", "Already authenticated"),
                 string(values, "bridge.messages.authenticated-auth-allowed", "You are already authenticated. Auth is only needed for login."),

@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.InetAddress;
 import java.util.UUID;
 import java.util.concurrent.CompletionStage;
 
@@ -31,7 +32,7 @@ public interface IdentityResolver {
     default void handleFastLogin(@NotNull Object event) {}
 
     @NotNull
-    default NativeDecision prepareNative(@NotNull String name, @NotNull ProxyBridgeConfig config, boolean skip) {
+    default NativeDecision prepareNative(@NotNull String name, @Nullable InetAddress address, @NotNull ProxyBridgeConfig config, boolean skip) {
         return NativeDecision.offline(name);
     }
 

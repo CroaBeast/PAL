@@ -121,6 +121,7 @@ public final class PALVelocityPlugin implements PALAddon {
 
         IdentityResolver.NativeDecision nativeDecision = identityResolver.prepareNative(
                 event.getUsername(),
+                event.getConnection().getRemoteAddress().getAddress(),
                 bridgeConfig,
                 hasPlugin("fastlogin") || isGeyserFloodgateConnection(event.getConnection().getRemoteAddress())
         );

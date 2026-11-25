@@ -5,6 +5,7 @@ import com.bitaspire.pal.proxy.connection.ConnectionRequest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.InetAddress;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -45,8 +46,8 @@ final class HookIdentityResolver implements IdentityResolver {
 
     @NotNull
     @Override
-    public NativeDecision prepareNative(@NotNull String name, @NotNull ProxyBridgeConfig config, boolean skip) {
-        return nativePremiumSupport.prepare(name, config, skip);
+    public NativeDecision prepareNative(@NotNull String name, @Nullable InetAddress address, @NotNull ProxyBridgeConfig config, boolean skip) {
+        return nativePremiumSupport.prepare(name, address, config, skip);
     }
 
     @NotNull

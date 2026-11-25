@@ -30,6 +30,7 @@ import org.bstats.bungeecord.Metrics;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -83,6 +84,9 @@ public final class PALBungeePlugin extends Plugin implements Listener, PALAddon 
 
         IdentityResolver.NativeDecision nativeDecision = identityResolver.prepareNative(
                 event.getConnection().getName(),
+                event.getConnection().getSocketAddress() instanceof InetSocketAddress
+                        ? ((InetSocketAddress) event.getConnection().getSocketAddress()).getAddress()
+                        : null,
                 bridgeConfig,
                 hasPlugin("FastLogin")
         );
