@@ -97,6 +97,8 @@ premium:
     # Values: true, false.
     use-premium-uuid: true
     # Blocks password accounts from taking a known premium name.
+    # When false, offline players may use any name: only names already stored as premium
+    # accounts are verified with Mojang at login, and registration never checks Mojang.
     # Values: true, false.
     protect-premium-name-from-offline: true
     # Allows a premium account to switch itself back to password login.
@@ -113,7 +115,9 @@ premium:
     require-password: true
     # Behavior when an offline player uses a known premium name.
     # Values:
-    # - ASK: require explicit player choice/flow.
+    # Only applies while protect-premium-name-from-offline is true.
+    # - ASK: the first join is verified with Mojang; a non-premium client that fails it joins
+    #   on its next try from the same IP within 5 minutes, and /register must be run twice.
     # - BLOCK: deny the offline registration/login.
     # - ALLOW: allow offline use.
     block-if-premium-name-exists: ASK
