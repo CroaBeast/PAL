@@ -8,19 +8,24 @@ import com.bitaspire.pal.auth.AuthResult;
 import com.bitaspire.pal.auth.AuthService;
 import com.bitaspire.pal.auth.PasswordHash;
 import com.bitaspire.pal.auth.PasswordHasher;
+import com.bitaspire.pal.identity.IdentityRequest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ConcurrentHashMap;
 
 final class AuthServiceImpl extends AbstractService implements AuthService {
 
     private final PasswordHasher hasher = new Pbkdf2PasswordHasher();
     private final AuthThrottle throttle = new AuthThrottle();
+    private final Map<String, Long> premiumNameConfirmations = new ConcurrentHashMap<>();
     private AuthOptions options;
 
     AuthServiceImpl(@NotNull PALApi api) {
@@ -48,6 +53,39 @@ final class AuthServiceImpl extends AbstractService implements AuthService {
         AuthResult validation = validateRegistration(request, password);
         if (validation != null) return CompletableFuture.completedFuture(validation);
 
+        return premiumNameCheck(request).thenCompose(refusal -> refusal != null
+                ? CompletableFuture.completedFuture(refusal)
+                : createOfflineAccount(request, password));
+    }
+
+    /**
+     * Null when the offline registration may go ahead. ASK refuses once and lets the same
+     * command through within five minutes, so repeating it is the confirmation.
+     */
+    @NotNull
+    private CompletionStage<AuthResult> premiumNameCheck(@NotNull AuthRequest request) {
+        PremiumOptions premium = ((PremiumServiceImpl) api.getPremiumService()).options();
+        String policy = premium.getPremiumNameConflictPolicy();
+        if (!premium.isProtectPremiumNameFromOffline() || "ALLOW".equalsIgnoreCase(policy))
+            return CompletableFuture.completedFuture(null);
+
+        return api.getPremiumService().resolveIdentity(IdentityRequest.of(request.getName(), request.getAddress()))
+                .thenApply(identity -> {
+                    if (!identity.isPremiumNameExists()) return null;
+                    if (!"ASK".equalsIgnoreCase(policy))
+                        return AuthResult.of(AuthResult.Type.BLOCKED, "auth.premium-name-protected");
+
+                    String key = request.getName().toLowerCase(Locale.ROOT);
+                    Long at = premiumNameConfirmations.remove(key);
+                    if (at != null && System.currentTimeMillis() - at <= 300_000L) return null;
+
+                    premiumNameConfirmations.put(key, System.currentTimeMillis());
+                    return AuthResult.of(AuthResult.Type.BLOCKED, "auth.premium-name-confirm");
+                });
+    }
+
+    @NotNull
+    private CompletionStage<AuthResult> createOfflineAccount(@NotNull AuthRequest request, @NotNull String password) {
         AccountCreateRequest createRequest = AccountCreateRequest.offline(request.getName(), request.getAddress());
 
         return accountService().create(createRequest).thenCompose(result -> {

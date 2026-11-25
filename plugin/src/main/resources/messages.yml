@@ -54,6 +54,10 @@ auth:
   invalid-password: "<P> &cInvalid password."
   # Sent when repeated passwords do not match.
   password-mismatch: "<P> &cPasswords do not match."
+  # Sent when registering a name owned by a Mojang account and the policy is BLOCK.
+  premium-name-protected: "<P> &cThis name belongs to a premium account. Use another name."
+  # Sent when registering a name owned by a Mojang account and the policy is ASK.
+  premium-name-confirm: "<P> &eThis name belongs to a premium account. Run the same command again within 5 minutes to register it anyway."
   # Sent when the password is below the configured minimum length.
   password-short: "<P> &cYour password is too short."
   # Sent when the password exceeds the configured maximum length.
